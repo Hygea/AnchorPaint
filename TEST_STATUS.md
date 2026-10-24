@@ -171,6 +171,21 @@ filename-text drag fired `dragstart` with its default action cancelled and did
 not activate the drop zone. Evidence: `artifacts/slider-drag/verification.json`
 and `baseext.png`.
 
+## User-reported OrcaSlicer check
+
+On 2026-10-24, the user installed OrcaSlicer and reported that AnchorPaint's
+existing 3MF export worked directly: the anchor was present with the same
+settings, and increased wall loops applied at the intended position. No export
+adaptation was needed for that reported case. The model filename, OrcaSlicer
+version and detailed layer-preview evidence were not supplied. The installed
+version could not be confirmed independently.
+
+This is user-reported evidence, not an agent-run OrcaSlicer verification or a
+claim about all OrcaSlicer versions. A save/reopen check, confirming the affected
+range in the sliced layer preview, and (if used) changing to the actual printer
+profile are useful follow-ups. Multiple-target behavior and native round trips
+have not been independently tested in OrcaSlicer. PrusaSlicer remains untested.
+
 ## Real Bambu Studio checks
 
 Installed/tested version: **2.8.2.61** (file version 02.08.02.61).
@@ -196,7 +211,8 @@ Upstream source inspection is pinned to tag v02.08.02.61, commit
 | GUI layer inspection | Viewed 1.8 mm, 4.0 mm root, and 4.2 mm above-root layers in Line Type view |
 | Full baseline/manual/generated layer comparison | **Not performed** |
 | Separate GUI save/reopen inspection of final export | **Not performed**; save/reopen verification above is through the real CLI |
-| Other Bambu versions or slicers | **Not tested** |
+| OrcaSlicer direct import and wall-loop region | **User reported working**, 2026-10-24; version and save/reopen not confirmed; see above |
+| Other Bambu versions, PrusaSlicer and remaining slicers | **Not tested** |
 
 The successful final CLI checks use unchanged settings from a Bambu GUI-saved
 stock P1S project: Bambu Lab P1S 0.4 nozzle, process

@@ -91,6 +91,13 @@ Under **Advanced options → Use my own Bambu settings** you can choose an exist
 3MF if you prefer your own export presets, and restore the default at any time.
 The same optional settings source can be reused for many STL models.
 
+**OrcaSlicer:** on 2026-10-24, the user reported that the existing export opened
+directly with the anchor aligned and the increased wall-loop setting applied in
+the intended region. This is a user-reported compatibility result; the OrcaSlicer
+version, save/reopen behavior and printer-profile switching have not been
+recorded or independently tested. PrusaSlicer remains untested. See
+[TEST_STATUS.md](TEST_STATUS.md) for the exact scope of slicer checks.
+
 **Or try a sample** loads a single hollow-post example. It uses the same real
 selection pipeline and starts without any modifiers. Fixture/reference modes
 and baseline export are developer tools rather than choices in the product UI.
