@@ -16,7 +16,8 @@ shaped caps; details and exact limits are in docs/SERVO_PILOT.md.
 | --- | --- |
 | Geometry, export, selection and settings-source tests | **86 passed**, Node test runner |
 | Browser interaction/download tests | **17 passed**, Playwright with installed Chrome |
-| Production browser acceptance | **1 passed**, built files served by Vite preview under `/AnchorPaint/`; JS/CSS/sample/preset loading, rendered modifier, download, local-file privacy and console checks |
+| Production browser acceptance | **1 passed locally and in GitHub CI**, built files served by Vite preview under `/AnchorPaint/`; JS/CSS/sample/preset loading, rendered modifier, download, local-file privacy and console checks |
+| GitHub-hosted release preparation build | **Passed**, Ubuntu / Node 24.21.0 / Playwright Chromium; core tests, build and production acceptance; deploy job skipped for PR |
 | TypeScript check and production build | **Passed** |
 | Dependency audit | **0 reported vulnerabilities** after dependency selection |
 | All 15 reference STLs reloaded | Closed, consistent winding, positive volumes and expected bounds checked |
@@ -58,8 +59,13 @@ The release-preparation task completed a clean `npm ci` (zero reported
 vulnerabilities), all 86 geometry/export/profile/selection tests, all 17 existing
 browser tests, the TypeScript/production build and one new production browser
 acceptance test. Local runtime: Windows, Node 23.10.0, installed Chrome. The
-workflow specifies Node.js 24 on Ubuntu; a successful GitHub-hosted run has not
-yet been recorded here.
+workflow was also executed successfully on GitHub's Ubuntu runner using Node
+24.21.0 and Playwright Chromium. Its clean install, 86 core tests, build,
+production browser acceptance and Pages-artifact upload all passed. Deployment
+was skipped because the event was a pull request. Evidence:
+[run 40082934227](https://github.com/Hygea/AnchorPaint/actions/runs/40082934227),
+tested commit `e001949e1afb42cd86571cc6c04640ae1bdbf92a` on the preparation branch.
+The `github-pages` artifact was 225,809 bytes; no site was deployed from that run.
 
 The built site was served with `npm run preview -- --base /AnchorPaint/` and
 tested at the case-sensitive project prefix. The browser loaded JavaScript,

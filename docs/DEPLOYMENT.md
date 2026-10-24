@@ -7,7 +7,7 @@ Target: https://hygea.github.io/AnchorPaint/ (planned, not verified live).
 
 | Milestone | Status |
 | --- | --- |
-| Deployment prepared | Workflow, production path check, notices and documentation prepared for review |
+| Deployment prepared | Workflow, production path check, notices and documentation prepared; Node 24 GitHub build passed on the preparation PR |
 | Deployment successfully published | Not performed or verified |
 | Public release approved | No; licensing and history privacy decisions remain open |
 | Public release published | No tag or GitHub Release created |
@@ -65,6 +65,13 @@ Target: https://hygea.github.io/AnchorPaint/ (planned, not verified live).
    GitHub Release. Pages is the distribution method; no desktop installer is needed.
 
 ## Workflow and local verification
+
+The preparation PR's [first GitHub-hosted run](https://github.com/Hygea/AnchorPaint/actions/runs/40082934227)
+passed on Ubuntu with Node 24.21.0 at commit
+`e001949e1afb42cd86571cc6c04640ae1bdbf92a`. Core tests, build, production browser
+acceptance and artifact upload passed. Deploy was skipped for the PR as intended.
+This verifies build preparation, not Pages configuration, public hosting or release
+approval. Full local results are in [TEST_STATUS.md](../TEST_STATUS.md).
 
 The `build` job installs locked dependencies on Node.js 24, tests geometry/export,
 builds, installs Playwright Chromium and checks the production app, then uploads

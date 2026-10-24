@@ -125,6 +125,14 @@ No Bambu implementation code was copied into the app as part of this task.
 
 ## Version and release decision
 
+Validation was actually run: clean dependency installation, 86 core tests,
+17 local UI tests, TypeScript/production build and one production browser check.
+The production test also passed in the Node 24.21.0 Ubuntu GitHub build, which
+uploaded the static artifact and skipped deployment for the PR. The run is
+[40082934227](https://github.com/Hygea/AnchorPaint/actions/runs/40082934227)
+at commit `e001949e1afb42cd86571cc6c04640ae1bdbf92a`. No successful public
+deployment, native slicer rerun or release approval is implied.
+
 `0.1.0` remains appropriate as an initial experimental MVP version. The package
 and export generator already use it consistently; no bump is needed for
 deployment preparation. The npm package stays `private: true`, which prevents
