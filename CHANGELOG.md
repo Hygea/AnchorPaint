@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Replace the AP monogram with a half-painted teal/orange anchor in the app header
+  and browser icon, using one shared SVG asset.
+
 ## 0.1.0 — 2026-10-24
 
 Initial experimental preview:

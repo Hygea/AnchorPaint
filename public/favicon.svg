@@ -1,6 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <rect width="64" height="64" rx="16" fill="#e4f3ef"/>
-  <g fill="#147d77" font-family="system-ui, sans-serif" font-size="34" font-weight="750">
-    <text x="11" y="38">a</text><text x="30" y="47">p</text>
-  </g>
+  <defs>
+    <g id="anchor" fill="none" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="32" cy="15.5" r="5.5"/>
+      <path d="M32 21v32M22 29h20M15 36c0 10 7.5 17 17 17s17-7 17-17M10 40l5-6 6 5M43 39l6-5 5 6"/>
+    </g>
+    <clipPath id="paint">
+      <path d="M36 0h28v64H28V48l3-3-1-4 3-3-1-4 3-3-1-4 3-3-1-4Z"/>
+    </clipPath>
+  </defs>
+  <use href="#anchor" stroke="#147d77"/>
+  <use href="#anchor" stroke="#de8734" clip-path="url(#paint)"/>
 </svg>
