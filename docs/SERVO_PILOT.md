@@ -20,7 +20,10 @@ After size confirmation, clicking the cylindrical side derives an isolated
 3.05 mm diameter footprint. Its root is Z=-15.420025, its straight shaft ends
 at -12.420025, and the available base depth is 2 mm. The shaped tip is above
 that shaft and does not enter the footprint/overlap calculation. Default depth
-3 mm is visibly invalid for this base; the tested value was 1.5 mm.
+3 mm was visibly invalid for this base in the initial pilot; the tested value
+was 1.5 mm. The subsequent new-selection refinement automatically fits that
+initial value to 2 mm before displaying the first preview. Later manually typed
+values above the limit still show a validation error.
 
 The actual browser export used depth 1.5 mm, overlap 2 mm and wall loops 4.
 Its modifier source-frame bounds are:

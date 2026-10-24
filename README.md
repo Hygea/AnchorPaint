@@ -61,12 +61,15 @@ serve the same `dist/` folder. No online deployment has been performed yet.
    orientation** restores the loaded file's orientation. The disk file is never
    changed. Negative/offset coordinates are fine. STL files carry no unit
    metadata; confirmation does not rescale the model.
-2. Hover a blue side face to preview its surface, then click it. Review the green
-   selection, orange modifier and purple outline at its base.
+2. Hover a blue side face to preview its surface, then click it. Review the light
+   selection tint with its teal outline, orange modifier and purple base outline.
    The complete footprint, including holes, is derived from STL cross-sections.
    Review the available depth, then **Add modifier** to confirm it. If the
    starting point is ambiguous, use **Pick base surface** and click the flat
    supporting top surface before adding.
+   When a new feature has smaller limits, depth/overlap automatically fit those
+   limits before the first preview. The selection card explains any adjustment.
+   Values that already fit are kept.
 3. Adjust **Depth into base** with the slider or number field. The slider uses
    the available local base depth; across several targets it uses the smallest
    limit. It updates shared depth and preview while dragged. A number typed
@@ -94,7 +97,8 @@ The model is solid by default. Blue indicates upright sides that can be checked;
 hover is a selection preview, not a promise that a feature is supported. The
 geometry check runs when you click, after size confirmation. **See inside** switches to a transparent
 view, and **Fit / 3D / Top** help inspect or recover the view. Orange volumes are
-shown through the model so their depth is visible. **Esc** cancels a selection;
+shown through the model, above the selection/hover tint, with dark orange upper
+edges so both depth and upward overlap remain visible. **Esc** cancels a selection;
 **Undo** (Ctrl+Z outside text fields) restores target changes. Overlap and surface
 fill angle are in Advanced options. Export remains visible at the bottom.
 

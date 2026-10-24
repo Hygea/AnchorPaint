@@ -72,6 +72,10 @@ side as supported geometry. Ambiguous base picking previews a connected flat
 surface in purple. A purple footprint outline marks the root, and the base height
 is shown relative to model bottom rather than offset source Z. Orange volumes
 render through the original to show depth; See inside is an optional view mode.
+Selected surfaces use a light teal tint and a teal boundary outline. Modifier
+fill and dark orange edges render after selection and hover, with the purple
+root outline last. This prevents the selection tint from concealing the upward
+overlap; all these changes affect display groups only.
 
 The viewer keeps source, modifiers, selection, hover and root outlines in separate
 groups. Hover only replaces its small overlay, not the whole original mesh.
@@ -99,6 +103,16 @@ numeric setting and schedules one shared preview update per frame; release
 commits immediately. Export/add are disabled during a pending update to avoid
 exporting a previous slider value. Slider interaction does not change source
 coordinates or the root.
+
+**Valid settings on a new selection.** Once a newly derived candidate has local
+limits, current valid depth/overlap values are retained. Values outside those
+limits (or empty/non-positive values) are fitted to the available range before
+the first preview, using the same native slider step as a pointer gesture.
+The effective maximum includes already added targets because settings are
+shared. The selection card explains adjustments. This happens only at successful
+feature/root selection; later typed invalid values stay invalid until corrected.
+Rendering, profile loading, camera changes and field input do not silently clamp
+them. Wall counts retain their independent integer validation.
 
 **Keep native dragging separate from controls.** The app has no drag-out action,
 so document `dragstart` events are cancelled. Text remains selectable/copyable

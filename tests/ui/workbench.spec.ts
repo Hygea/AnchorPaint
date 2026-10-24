@@ -32,6 +32,68 @@ function stlPayload(mesh: MeshData, name: string) {
   return { name, mimeType: 'model/stl', buffer: Buffer.from(`solid test\n${facets.join('\n')}\nendsolid test`) };
 }
 
+test('a new thin, short feature immediately fits both defaults and still validates later typed values', async ({ page }) => {
+  const source = cappedPostModel('flared');
+  const upright: MeshData = { ...source, vertices: source.vertices.map(v => [v[0], v[1], v[2] === 0 ? 0 : 2 + (v[2] - 4) * .4]) };
+  const sideways: MeshData = { ...upright, vertices: upright.vertices.map(v => [-v[2], v[1], v[0]]) };
+  await page.goto('/');
+  await page.locator('#stl').setInputFiles(stlPayload(sideways, 'thin_short_pin.stl'));
+  await expect(page.locator('#confirm-row')).toBeVisible();
+  await page.locator('#orient-model').click(); await page.mouse.click(950, 600);
+  await page.mouse.click(884, 537); await page.locator('#confirm-dimensions').click();
+  await expect(page.locator('#selection-title')).toHaveText('Round post selected');
+  await expect(page.locator('#add-target')).toBeEnabled();
+  await expect(page.locator('#depth')).toHaveValue('2');
+  await expect(page.locator('#depth-slider')).toHaveValue('2');
+  await expect(page.locator('#overlap')).toHaveValue('1.2');
+  await expect(page.locator('#overlap-slider')).toHaveValue('1.2');
+  await expect(page.locator('#selection-info')).toContainText('Depth set to 2 mm; Overlap set to 1.2 mm');
+  await page.locator('#depth').fill('2.5'); await expect(page.locator('#add-target')).toBeDisabled();
+  await page.locator('#view-top').click(); await expect(page.locator('#depth')).toHaveValue('2.5');
+  await page.locator('#depth').fill('1.5'); await advanced(page);
+  await page.locator('#overlap').fill('1.3'); await expect(page.locator('#add-target')).toBeDisabled();
+  await page.locator('#xray').check(); await expect(page.locator('#overlap')).toHaveValue('1.3');
+  await page.locator('#overlap').fill('0.7'); await page.locator('#add-target').click();
+  const downloaded = page.waitForEvent('download'); await page.locator('#export').click();
+  const output = inspect3mf((await (await downloaded).path())!);
+  expect(output.volumes[1].stats.bounds.min[2]).toBeCloseTo(.5, 5);
+  expect(output.volumes[1].stats.bounds.max[2]).toBeCloseTo(2.7, 5);
+  await load(page); await clickSide(page);
+  await expect(page.locator('#depth')).toHaveValue('1.5');
+  await expect(page.locator('#overlap')).toHaveValue('0.7');
+});
+
+test('the orange overlap stays distinct during selection/hover and its upper boundary follows the setting', async ({ page }) => {
+  await page.goto('/'); await load(page); await clickSide(page);
+  await page.mouse.move(single.x, single.y);
+  await expect(page.locator('#viewport')).toHaveAttribute('data-hover', 'side');
+  async function orangeBand() {
+    // This crop is above the sample's root and includes the projected top edge
+    // of its modifier, with the selected and hovered shaft behind it.
+    const png = await page.screenshot({ clip: { x: 790, y: 450, width: 190, height: 160 } });
+    return page.evaluate(async base64 => {
+      const img = new Image(); img.src = `data:image/png;base64,${base64}`; await img.decode();
+      const canvas = document.createElement('canvas'); canvas.width = img.width; canvas.height = img.height;
+      const ctx = canvas.getContext('2d')!; ctx.drawImage(img, 0, 0);
+      const data = ctx.getImageData(0, 0, img.width, img.height).data;
+      let count = 0, top = img.height;
+      for (let i = 0; i < data.length; i += 4) if (data[i] > data[i + 1] + 18 && data[i + 1] > data[i + 2] + 25) {
+        count++; top = Math.min(top, Math.floor(i / 4 / img.width));
+      }
+      return { count, top };
+    }, png.toString('base64'));
+  }
+  const initial = await orangeBand(); expect(initial.count).toBeGreaterThan(1000);
+  await advanced(page); await page.locator('#overlap').fill('4');
+  await page.mouse.move(single.x, single.y);
+  const raised = await orangeBand();
+  expect(raised.top).toBeLessThan(initial.top - 15);
+  expect(raised.count).toBeGreaterThan(initial.count + 800);
+  await page.locator('#overlap').fill('0.5'); await page.mouse.move(single.x, single.y);
+  const lowered = await orangeBand();
+  expect(lowered.top).toBeGreaterThan(initial.top + 10);
+});
+
 test('AnchorPaint orients a sideways capped pin, exports the complete rotated model and restores the original', async ({ page }) => {
   const upright = cappedPostModel('domed');
   const sideways: MeshData = { ...upright, vertices: upright.vertices.map(v => [-v[2], v[1], v[0]]) };
@@ -394,6 +456,7 @@ test('new or invalid models clear targets and reset dimension confirmation', asy
 
 test('bore selection requests a base click and recovers from clicking a top face', async ({ page }) => {
   await page.goto('/'); await load(page);
+  await page.locator('#depth').fill('10'); await advanced(page); await page.locator('#overlap').fill('20');
   // Looking into the bore from above hits its inner side, which extends below
   // the feature root. The flat base then establishes the correct starting plane.
   await page.mouse.click(880, 405);
@@ -408,6 +471,9 @@ test('bore selection requests a base click and recovers from clicking a top face
   await page.mouse.click(1050, 700);
   await expect(page.locator('#selection-title')).toHaveText('Round post selected');
   await expect(page.locator('#selection-facts')).toContainText('Base at 4 mm');
+  await expect(page.locator('#depth')).toHaveValue('4');
+  await expect(page.locator('#overlap')).toHaveValue('14');
+  await expect(page.locator('#add-target')).toBeEnabled();
 });
 
 test('small screens keep model controls and export usable without page overflow', async ({ page }) => {

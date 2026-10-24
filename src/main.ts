@@ -30,6 +30,7 @@ let modifiers: ModifierPart[] = [];
 let chooseRoot = false;
 let chooseOrientation = false;
 let selectionError = '';
+let selectionAdjustment = '';
 let modelError = '';
 let profileError = '';
 let exportNotice = '';
@@ -101,6 +102,27 @@ function renderTargets() {
 function makePart(anchor: Anchor, depth: number, overlap: number, wallLoops: number): ModifierPart {
   validateAnchorSettings(anchor, depth, overlap);
   return { name: `${modelName}_anchor_${anchor.id}`, wallLoops, mesh: extrudeFootprint(anchor.footprint, anchor.rootZ, depth, overlap) };
+}
+function fitNewSelection() {
+  if (!candidate) return;
+  const targets = [...anchors, candidate];
+  const adjusted: string[] = [];
+  for (const [setting, limit, fallback, label] of [
+    ['depth', Math.min(...targets.map(a => a.maxDepth)), 3, 'Depth'],
+    ['overlap', Math.min(...targets.map(a => a.topZ - a.rootZ)), 2, 'Overlap'],
+  ] as const) {
+    const current = Number(input(setting).value);
+    const next = Math.min(Number.isFinite(current) && current > 0 ? current : fallback, limit);
+    if (current !== next) {
+      input(setting).value = String(next);
+      // Use the same native range step as a slider gesture, avoiding long STL
+      // float32 tails in the initial value and keeping thumb/number in sync.
+      updateSlider(setting, [limit]);
+      input(setting).value = input(`${setting}-slider`).value;
+      adjusted.push(`${label} set to ${mm(Number(input(setting).value))} mm`);
+    }
+  }
+  selectionAdjustment = adjusted.length ? `${adjusted.join('; ')} to fit ${anchors.length ? 'all selected features' : 'this feature'}.` : '';
 }
 function updateSlider(setting: SliderSetting, limits: number[]) {
   const slider = input(`${setting}-slider`);
@@ -177,7 +199,7 @@ function update() {
     const duplicate = alreadyAdded(candidate);
     showSelection(duplicate ? 'This feature is already added' : candidate.kind === 'boss' ? 'Round post selected' : 'Straight wall selected', duplicate
       ? 'Choose another feature. Changing the depth or walls updates all added modifiers.'
-      : 'Check the purple outline at its base, then add this modifier.', 'ready');
+      : `${selectionAdjustment ? selectionAdjustment + ' ' : ''}Check the purple outline at its base, then add this modifier.`, 'ready');
     button('add-target').disabled = duplicate;
     el('selection-facts').hidden = false;
     for (const fact of [`Up to ${mm(candidate.maxDepth)} mm depth`, `Base at ${mm(candidate.rootZ - stats!.bounds.min[2])} mm`, ...(candidate.footprint.holes.length ? ['Hole preserved'] : []), ...(candidate.overlapLimitedByCap ? ['Overlap stops below cap'] : [])]) {
@@ -202,7 +224,7 @@ function reset() {
   if (settingsFrame !== undefined) cancelAnimationFrame(settingsFrame);
   settingsFrame = undefined;
   model = undefined; originalModel = undefined; analysis = undefined; stats = undefined; region = undefined; candidate = undefined;
-  anchors = []; history = []; nextId = 1; chooseRoot = false; chooseOrientation = false; selectionError = ''; exportNotice = ''; modelError = '';
+  anchors = []; history = []; nextId = 1; chooseRoot = false; chooseOrientation = false; selectionError = ''; selectionAdjustment = ''; exportNotice = ''; modelError = '';
   input('confirm').checked = false; hoverRegions.clear(); baseRegions.clear(); viewer?.clear();
   el('model-name').textContent = 'Loading your STL…'; el('dimensions').textContent = '';
   update();
@@ -253,7 +275,7 @@ function pick(face: number) {
     return;
   }
   if (!confirmed()) { promptDimensions(face); return; }
-  exportNotice = ''; selectionError = ''; candidate = undefined;
+  exportNotice = ''; selectionError = ''; selectionAdjustment = ''; candidate = undefined;
   try {
     if (chooseRoot && region) {
       const root = horizontalRoot(analysis, face);
@@ -263,6 +285,7 @@ function pick(face: number) {
       region = filled(face);
       if (region.proposedRoot !== undefined) candidate = deriveAnchor(analysis, region, region.proposedRoot, String(nextId));
     }
+    fitNewSelection();
   } catch (error) { selectionError = text(error); }
   update();
 }
@@ -308,7 +331,7 @@ button('confirm-dimensions').addEventListener('click', () => {
 });
 button('cancel-dimensions').addEventListener('click', cancelDimensionPrompt);
 dimensionDialog.addEventListener('cancel', () => { pendingPick = undefined; });
-function clearSelection() { region = undefined; candidate = undefined; chooseRoot = false; chooseOrientation = false; selectionError = ''; update(); }
+function clearSelection() { region = undefined; candidate = undefined; chooseRoot = false; chooseOrientation = false; selectionError = ''; selectionAdjustment = ''; update(); }
 function applyOrientation(oriented: MeshData) {
   // Validate before discarding targets. Reorient every part together by deriving
   // new targets in this explicit build frame; the disk file is never modified.
@@ -327,9 +350,9 @@ for (const id of ['open-stl', 'empty-open']) button(id).addEventListener('click'
 input('stl').addEventListener('change', () => { const file = input('stl').files?.[0]; if (file) void loadFile(file); });
 button('sample').addEventListener('click', loadSample);
 input('confirm').addEventListener('change', () => { if (!confirmed()) clearSelection(); update(); });
-for (const id of ['depth', 'overlap', 'walls']) input(id).addEventListener('input', () => { exportNotice = ''; update(); });
+for (const id of ['depth', 'overlap', 'walls']) input(id).addEventListener('input', () => { exportNotice = ''; selectionAdjustment = ''; update(); });
 function commitSlider(setting: SliderSetting, flush = false) {
-  input(setting).value = input(`${setting}-slider`).value; exportNotice = '';
+  input(setting).value = input(`${setting}-slider`).value; exportNotice = ''; selectionAdjustment = '';
   button('export').disabled = true; button('add-target').disabled = true;
   if (flush) {
     if (settingsFrame !== undefined) cancelAnimationFrame(settingsFrame);

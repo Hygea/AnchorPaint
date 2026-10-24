@@ -15,7 +15,7 @@ shaped caps; details and exact limits are in docs/SERVO_PILOT.md.
 | Check | Result |
 | --- | --- |
 | Geometry, export, selection and settings-source tests | **86 passed**, Node test runner |
-| Browser interaction/download tests | **15 passed**, Playwright with installed Chrome |
+| Browser interaction/download tests | **17 passed**, Playwright with installed Chrome |
 | TypeScript check and production build | **Passed** |
 | Dependency audit | **0 reported vulnerabilities** after dependency selection |
 | All 15 reference STLs reloaded | Closed, consistent winding, positive volumes and expected bounds checked |
@@ -29,6 +29,8 @@ shaped caps; details and exact limits are in docs/SERVO_PILOT.md.
 | First-click size prompt | Hover before confirmation, explicit confirm resumes the clicked surface, Go back/Esc cancellation, new-model pending-click reset and no repeated prompt checked |
 | Depth slider | Local maximum, keyboard changes, typed-value synchronization, invalid-value recovery and actual exported Z bounds checked |
 | Advanced overlap slider | Feature-height maximum, keyboard changes, typed-value synchronization, invalid-value recovery, reset on replacement and actual exported upper Z bound checked |
+| New-selection defaults | Thin/short feature fits depth and overlap immediately after orientation/confirmation; manual base picking fits limits too; valid values persist and later typed invalid values remain errors |
+| Visible upward overlap | Rendered-image pixel check finds a distinct orange band with both selection and hover active; its upper boundary moves with overlap |
 | Explicit print orientation | Six proper axis rotations preserve scale, winding, triangle order and source input; browser bed-face rotation, dimensions reset, rotated-model export and original-orientation restoration checked |
 | Shaped pin caps | Synthetic domed, flared and concave caps derive shaft modifiers; concave-cap upper limit and exported volume also checked through STL loading and the browser |
 | Slider drag isolation | Repeated real pointer drags outside both sliders and back preserve selection, update the setting and cause no file chooser/download |
@@ -48,6 +50,31 @@ approximately 199 KB gzipped application JavaScript, one 38,484-byte sample STL
 and the 10,274-byte stock settings asset. The 13 former runtime STLs totalled
 579,692 bytes; the remaining fixtures are now test/developer assets only.
 Vite reports a non-fatal warning about the uncompressed chunk exceeding 500 KB.
+
+## Immediate valid preview and overlap contrast
+
+The user's servo screenshot showed depth 3 mm against a 2 mm local maximum.
+Validation correctly rejected the modifier, leaving only the selected surface;
+this looked like a missing preview until the slider was moved. Successful new
+feature/root selection now fits out-of-range depth/overlap to the shared local
+limits before generating the preview. The adjustment is explained in the card.
+Later manual invalid edits are still rejected and valid existing values are kept.
+
+Green selection/hover previously rendered over the orange modifier. Selection
+now has a light tint and teal boundary; orange fill and dark orange edges render
+above both selection and hover. The base outline remains purple. No source or
+export geometry is changed by the visual treatment.
+
+The full 86 core tests, 17 browser tests and production build pass. New browser
+checks cover immediate depth 2 / overlap 1.2 on an independently generated thin,
+short pin, native slider/number agreement, exported Z bounds, continued manual
+validation and preservation of valid settings. A screenshot pixel check verifies
+orange is visible above the root during hover and that the boundary moves when
+overlap changes. Native Bambu checks were not rerun for this UI refinement.
+The actual servo-adapter was also loaded/reoriented again: its first selection
+was ready at depth 2 mm without a slider gesture. Its downloaded modifier had
+source Z=-17.420025–-13.420025 mm as expected. Local screenshots and this export
+are in `artifacts/selection-preview/` with `servo-verification.json`.
 
 ## Sideways servo-adapter and shaped-cap checks
 

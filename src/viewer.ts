@@ -150,7 +150,7 @@ export class Viewer {
   }
   setHover(faces: readonly number[], base = false) {
     this.release(this.hoverGroup);
-    this.overlay(faces, base ? 0x9673d0 : 0x1aab95, 0.65, this.hoverGroup);
+    this.overlay(faces, base ? 0x9673d0 : 0x1aab95, base ? 0.65 : 0.35, this.hoverGroup);
     this.renderer.domElement.style.cursor = faces.length ? 'pointer' : '';
     this.container.dataset.hover = faces.length ? (base ? 'base' : 'side') : 'none';
     this.render();
@@ -159,19 +159,24 @@ export class Viewer {
     for (const group of [this.modifierGroup, this.selectionGroup, this.rootGroup]) this.release(group);
     for (const data of modifiers) {
       const mesh = new THREE.Mesh(this.geometry(data), new THREE.MeshBasicMaterial({
-        color: 0xf2993e, transparent: true, opacity: 0.38, depthWrite: false, depthTest: false, side: THREE.FrontSide,
+        color: 0xf2993e, transparent: true, opacity: 0.64, depthWrite: false, depthTest: false, side: THREE.FrontSide,
       }));
-      mesh.renderOrder = 2;
+      mesh.renderOrder = 6;
       this.modifierGroup.add(mesh);
-      const outline = new THREE.LineSegments(new THREE.EdgesGeometry(mesh.geometry, 35), new THREE.LineBasicMaterial({ color: 0xc87722, transparent: true, opacity: 0.65, depthTest: false }));
-      outline.renderOrder = 3; this.modifierGroup.add(outline);
+      const outline = new THREE.LineSegments(new THREE.EdgesGeometry(mesh.geometry, 35), new THREE.LineBasicMaterial({ color: 0x9c4709, transparent: true, opacity: 0.95, depthTest: false }));
+      outline.renderOrder = 7; this.modifierGroup.add(outline);
     }
-    this.overlay(selected, 0x139783, 0.76, this.selectionGroup);
+    this.overlay(selected, 0x139783, 0.18, this.selectionGroup);
+    if (this.model && selected.length) {
+      const surface = this.geometry(this.model, selected);
+      const outline = new THREE.LineSegments(new THREE.EdgesGeometry(surface, 35), new THREE.LineBasicMaterial({ color: 0x087c83, transparent: true, opacity: 0.95, depthTest: false }));
+      surface.dispose(); outline.renderOrder = 4; this.selectionGroup.add(outline);
+    }
     if (root) {
       for (const loop of [root.footprint.outer, ...root.footprint.holes]) {
         const points = [...loop, loop[0]].map(p => new THREE.Vector3(p[0], p[1], root.z));
         const line = new THREE.Line(new THREE.BufferGeometry().setFromPoints(points), new THREE.LineBasicMaterial({ color: 0x895bc7, depthTest: false, transparent: true }));
-        line.renderOrder = 6; this.rootGroup.add(line);
+        line.renderOrder = 8; this.rootGroup.add(line);
       }
     }
     this.render();
