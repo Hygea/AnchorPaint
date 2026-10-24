@@ -173,17 +173,31 @@ and `baseext.png`.
 
 ## User-reported OrcaSlicer check
 
-On 2026-10-24, the user installed OrcaSlicer and reported that AnchorPaint's
-existing 3MF export worked directly: the anchor was present with the same
-settings, and increased wall loops applied at the intended position. No export
-adaptation was needed for that reported case. The model filename, OrcaSlicer
-version and detailed layer-preview evidence were not supplied. The installed
-version could not be confirmed independently.
+On 2026-10-24, the user reported **OrcaSlicer 2.4.2 portable** (spoken as
+"2.42") opened the existing AnchorPaint 3MF, kept the anchor aligned and the
+wall-loop override in the intended region, and sliced as expected. No export
+adaptation was needed for that reported case. The portable executable version
+was supplied by the user and was not inspected independently. The model filename
+and detailed layer-preview evidence were not supplied.
+
+The user also reported newer-version/configuration warnings and one setting
+substitution: `ensure_vertical_shell_thickness=enabled` was replaced with
+`ensure_all`. Inspection of the bundled default confirms it carries `enabled`
+and Bambu version 02.08.02.61. Orca's
+[v2.4.2 setting definition](https://github.com/OrcaSlicer/OrcaSlicer/blob/v2.4.2/src/libslic3r/PrintConfig.cpp#L1867-L1884)
+accepts `none`, `ensure_critical_only`, `ensure_moderate` and `ensure_all`, with
+`ensure_all` as the default. Its legacy conversion handles `1` and `0`, not
+`enabled`. The setting adds solid infill near sloping surfaces; it is separate
+from modifier transforms and `wall_loops`, but can affect slicing. This result
+is therefore **working with import warnings**, not warning-free compatibility
+or proof of identical toolpaths. No preset, application marker or runtime export
+behavior was changed to suppress the warning.
 
 This is user-reported evidence, not an agent-run OrcaSlicer verification or a
-claim about all OrcaSlicer versions. A save/reopen check, confirming the affected
-range in the sliced layer preview, and (if used) changing to the actual printer
-profile are useful follow-ups. Multiple-target behavior and native round trips
+claim about all OrcaSlicer versions. Save/reopen and (if used) changing to the
+actual printer profile remain useful follow-ups. The user reported correct
+slicing; a controlled comparison of affected layers has not been performed.
+Multiple-target behavior and native round trips
 have not been independently tested in OrcaSlicer. PrusaSlicer remains untested.
 
 ## Real Bambu Studio checks
@@ -211,7 +225,7 @@ Upstream source inspection is pinned to tag v02.08.02.61, commit
 | GUI layer inspection | Viewed 1.8 mm, 4.0 mm root, and 4.2 mm above-root layers in Line Type view |
 | Full baseline/manual/generated layer comparison | **Not performed** |
 | Separate GUI save/reopen inspection of final export | **Not performed**; save/reopen verification above is through the real CLI |
-| OrcaSlicer direct import and wall-loop region | **User reported working**, 2026-10-24; version and save/reopen not confirmed; see above |
+| OrcaSlicer 2.4.2 portable import, placement, wall-loop region and slicing | **User reported working with import warnings**, 2026-10-24; `enabled` replaced by `ensure_all`; save/reopen unconfirmed; see above |
 | Other Bambu versions, PrusaSlicer and remaining slicers | **Not tested** |
 
 The successful final CLI checks use unchanged settings from a Bambu GUI-saved

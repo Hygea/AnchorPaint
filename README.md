@@ -91,11 +91,13 @@ Under **Advanced options → Use my own Bambu settings** you can choose an exist
 3MF if you prefer your own export presets, and restore the default at any time.
 The same optional settings source can be reused for many STL models.
 
-**OrcaSlicer:** on 2026-10-24, the user reported that the existing export opened
-directly with the anchor aligned and the increased wall-loop setting applied in
-the intended region. This is a user-reported compatibility result; the OrcaSlicer
-version, save/reopen behavior and printer-profile switching have not been
-recorded or independently tested. PrusaSlicer remains untested. See
+**OrcaSlicer 2.4.2 portable:** on 2026-10-24, the user reported correct anchor
+placement, wall-loop overrides and slicing with the existing export, **with
+import warnings**. Orca replaced the bundled preset's
+`ensure_vertical_shell_thickness=enabled` with `ensure_all`. That setting affects
+solid infill near sloping surfaces; this is not a claim of identical slicing or
+warning-free support. Save/reopen and printer-profile switching remain unverified;
+the result is user-reported, not an independent agent-run test. PrusaSlicer remains untested. See
 [TEST_STATUS.md](TEST_STATUS.md) for the exact scope of slicer checks.
 
 **Or try a sample** loads a single hollow-post example. It uses the same real
