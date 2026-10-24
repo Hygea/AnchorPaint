@@ -10,10 +10,10 @@ compatibility with every slicer/version.
 | --- | --- |
 | Geometry, export, selection and settings tests | 86 passed |
 | Browser interaction/download tests | 17 passed in installed Chrome |
-| Production browser acceptance | 1 passed locally and on GitHub Ubuntu/Node 24.21.0 |
+| Production browser acceptance | Passed locally, on GitHub Ubuntu/Node 24.21.0 and against the live Pages site in Chrome |
 | TypeScript and production build | Passed; existing non-fatal bundle-size warning |
 | Clean dependency installation/audit | Passed; zero reported vulnerabilities at the recorded check |
-| GitHub Pages pipeline | Build, production check and artifact upload passed; deployment skipped for PR |
+| GitHub Pages pipeline | Build, production check, artifact upload and public deployment passed |
 
 The automated suite checks:
 
@@ -41,6 +41,17 @@ site resources. The source/license snapshot is also served with the artifact.
 Exact preset-source bytes are checked: Bambu's resolved JSON preserves CRLF
 line endings via a file-specific .gitattributes rule. This prevents checkout
 normalization from changing the reproduced archive on Linux.
+
+Live acceptance on 2026-10-24 exercised
+[the public site](https://hygea.github.io/AnchorPaint/) deployed from commit
+491c13b468076875fe721c79c1081436fab02ce2. The existing production test was run
+against the HTTPS URL in installed Chrome on Windows. Selection, orange preview,
+numeric controls, 3MF download, original mesh preservation and modifier bounds
+passed. The notices, both licenses and all 17 preset sources were fetched and
+validated. Local model/settings inputs caused no upload or unexpected requests;
+no browser errors or failed asset responses were observed during the test.
+The successful [deployment run](https://github.com/Hygea/AnchorPaint/actions/runs/40088367675)
+includes passing build and deploy jobs. Native slicer checks were not rerun.
 
 Commands and environment setup are in [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md).
 The local baseline used Windows/Node 23.10.0/Chrome; CI uses supported Node.js 24.
@@ -86,7 +97,6 @@ unverified. [Pinned Orca definition](https://github.com/OrcaSlicer/OrcaSlicer/bl
 
 ## Remaining checks
 
-- Public Pages activation and acceptance at the live URL.
 - Full baseline/manual/generated per-layer comparisons under matching settings.
 - Separate final native GUI save/reopen and printer-profile-switch checks.
 - Broader supported/unsupported geometry testing and guided usability checks.

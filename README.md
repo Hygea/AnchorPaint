@@ -6,7 +6,7 @@ one 3MF with the model and modifiers already positioned.
 
 **Experimental preview · v0.1.0**
 
-[Web app — deployment pending](https://hygea.github.io/AnchorPaint/)
+[Open AnchorPaint](https://hygea.github.io/AnchorPaint/)
 
 AnchorPaint runs in your browser. No installation, account or backend is required
 for the hosted app. STL processing and 3MF generation happen on your computer.

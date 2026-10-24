@@ -1,17 +1,25 @@
 # GitHub Pages deployment
 
-Target: https://hygea.github.io/AnchorPaint/ — deployment pending.
-The repository and site remain unpublished until the maintainer activates them.
-A passing CI build is not a successful public deployment.
+Site: https://hygea.github.io/AnchorPaint/ — live, verified 2026-10-24.
+The repository is public and Pages deploys from main through GitHub Actions.
+Both build and deploy passed in
+[run 40088367675](https://github.com/Hygea/AnchorPaint/actions/runs/40088367675).
+The live HTTPS site passed the production browser acceptance flow: sample load,
+selection, depth/overlap, visible preview, aligned 3MF export and local-file
+processing without uploads. Licenses and preset sources were also validated.
+See [verification status](../TEST_STATUS.md) for scope and remaining checks.
 
-## Before publication
+The temporary release/pages-v0.1.0 branch was fully merged and then deleted;
+main is the only remaining branch. The merge retains the preparation history.
+
+## Release preparation
 
 Review [release readiness](PUBLIC_RELEASE_AUDIT.md), [license scope](../NOTICE.md)
 and the [draft release notes](releases/v0.1.0.md). Original code is MIT; preset
 licenses and editable sources are included in the site. Review any remaining
 GitHub cached-history privacy issue before changing repository visibility.
 
-## Activate Pages
+## Pages setup reference
 
 1. Confirm the account's Pages eligibility. GitHub Free needs a public repository;
    a private personal repository needs GitHub Pro. The maintainer decides whether
@@ -56,8 +64,8 @@ For local commands and Windows notes, see [DEVELOPMENT.md](DEVELOPMENT.md).
 | Milestone | Status |
 | --- | --- |
 | Deployment prepared | Workflow and production checks pass; license/source packaging included |
-| Deployment successfully published | Pending activation and live verification |
-| Public release approved | Requires final maintainer review and live acceptance |
+| Deployment successfully published | Public Pages site and live browser acceptance verified 2026-10-24 |
+| Public release approved | Live acceptance complete; a version tag/release remains a separate maintainer decision |
 | Public release published | No tag or release created by preparation |
 
 References: [Vite deployment](https://vite.dev/guide/static-deploy.html#github-pages),
