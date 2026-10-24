@@ -6,7 +6,7 @@
       <path d="M32 21v32M22 29h20M15 36c0 10 7.5 17 17 17s17-7 17-17M10 40l5-6 6 5M43 39l6-5 5 6"/>
     </g>
     <clipPath id="paint">
-      <path d="M36 0h28v64H28V48l3-3-1-4 3-3-1-4 3-3-1-4 3-3-1-4Z"/>
+      <path d="M0 41h24l4-1 4 2 4-2 4 1h24v23H0Z"/>
     </clipPath>
   </defs>
   <use href="#anchor" stroke="#147d77"/>

@@ -2,8 +2,8 @@
 
 ## Unreleased
 
-- Replace the AP monogram with a half-painted teal/orange anchor in the app header
-  and browser icon, using one shared SVG asset.
+- Replace the AP monogram with a teal anchor whose lower third is painted orange,
+  reflecting reinforcement at the base. The header and browser icon share one SVG.
 
 ## 0.1.0 — 2026-10-24
 
