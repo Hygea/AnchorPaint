@@ -29,5 +29,3 @@ during discovery; it is not the compatibility target.
   https://threejs.org/docs/pages/ExtrudeGeometry.html
 - Polygon-clipping 0.15.7 (MIT), 2D polygon predicates and boolean operations:
   https://github.com/mfogel/polygon-clipping
-- OpenAI Codex CLI, for repository development:
-  https://developers.openai.com/codex/cli/

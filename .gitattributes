@@ -1,3 +1,5 @@
 * text=auto eol=lf
 *.stl -text
 *.3mf -text
+# Preserve Bambu's exported settings bytes for exact archive reproduction.
+public/preset-source/default-settings.json -text

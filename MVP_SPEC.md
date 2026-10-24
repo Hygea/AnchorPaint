@@ -31,8 +31,8 @@ separate hypothesis, not a claim made by the software.
 ## 3. Narrow first release
 
 Input: one valid STL interpreted in millimetres with explicit dimensions
-confirmation. Normally it is already oriented for printing. Per the user's
-2026-10-24 servo-adapter request, an explicit Set upright action may rotate the
+confirmation. Normally it is already oriented for printing. An explicit
+Set upright action may rotate the
 whole working mesh by an axis-aligned 90-degree rotation from a chosen bed face.
 This resets targets and confirmation; the original file is retained. General
 rotation/scaling, existing painted 3MF project import, STEP and OBJ import remain
@@ -96,7 +96,7 @@ settings modifiers, their transforms, and their wall-loop overrides. Preserve
 relative positions and holes. Bundle a clearly labelled stock default so users
 can export without preparing a settings project, then choose their printer,
 filament and process in Bambu Studio. Keep a custom settings-project override
-optional. This follows the user's clarified workflow. Do not overwrite an input.
+optional. Do not overwrite an input.
 
 The output must open with the generated regions identified as modifiers, not
 as new printable objects. Settings must still exist after save/reopen. Validate
