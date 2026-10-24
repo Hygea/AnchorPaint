@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AnchorPaint</title>
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="brand"><span class="brand-mark" aria-hidden="true">a<span>p</span></span><div><h1>AnchorPaint</h1><span class="subtitle">Surface to slicer modifier</span></div></div>
+      <ol class="progress" aria-label="Workflow"><li id="progress-model" data-state="active"><span>1</span>Load</li><li id="progress-select"><span>2</span>Select</li><li id="progress-export"><span>3</span>Export</li></ol>
+      <span class="local-badge"><i></i> Local only <small>Preview</small></span>
+    </header>
+    <main>
+      <aside aria-label="Modifier workflow">
+        <div class="sidebar-content">
+          <section class="step" id="model-step">
+            <div class="step-heading"><span class="step-number">1</span><h2>Your model</h2></div>
+            <input id="stl" class="sr-only" aria-label="Load your STL" type="file" accept=".stl" />
+            <div id="file-card" class="file-card">
+              <strong id="model-name">Start with an STL</strong>
+              <span id="dimensions">Already oriented for printing, in millimetres.</span>
+              <button id="open-stl" class="secondary">Open STL</button>
+              <button id="sample" class="text-button">Or try a sample</button>
+            </div>
+            <div id="orientation-tools" hidden>
+              <button id="orient-model" class="text-button">Model sideways? Set upright</button>
+              <button id="reset-orientation" class="text-button" hidden>Original orientation</button>
+              <p id="orientation-note" class="help" hidden>Orientation changes clear selections and added modifiers.</p>
+            </div>
+            <label id="confirm-row" class="check" hidden><input id="confirm" type="checkbox" /> These dimensions are correct (mm)</label>
+          </section>
+          <section class="step" id="select-step">
+            <div class="step-heading"><span class="step-number">2</span><h2>Select a surface</h2></div>
+            <p class="help">Hover a blue side face, then click. The selection follows the surface around the feature.</p>
+            <div class="pair">
+              <label>Depth into base <span class="unit">mm</span><input id="depth" type="number" min="0.01" step="0.1" value="3" disabled /></label>
+              <label>Walls in modifier<input id="walls" type="number" min="1" max="100" step="1" value="4" disabled /></label>
+            </div>
+            <div class="setting-range">
+              <input id="depth-slider" type="range" min="0.1" max="5" step="0.1" value="3" aria-label="Adjust depth into base" aria-describedby="depth-range-hint" disabled />
+              <p id="depth-range-hint" class="help">Select a surface to set the depth range.</p>
+            </div>
+            <div id="selection-card" class="selection-card" data-state="idle">
+              <strong id="selection-title">Choose a model first</strong>
+              <p id="selection-info">Then confirm its dimensions to start selecting.</p>
+              <div id="selection-facts" hidden></div>
+              <button id="choose-root" class="secondary" hidden>Pick base surface</button>
+              <button id="add-target" hidden disabled>Add modifier</button>
+              <button id="clear-selection" class="text-button" hidden>Cancel selection <kbd>Esc</kbd></button>
+            </div>
+            <div class="targets-heading"><h3>Added modifiers <span id="target-count">0</span></h3><button id="undo" class="text-button" disabled title="Undo target change (Ctrl+Z)">Undo</button></div>
+            <div id="targets"><p class="empty-list">Your added modifiers will appear here.</p></div>
+          </section>
+          <details id="advanced" class="advanced">
+            <summary>Advanced options</summary>
+            <label>Overlap above base <span class="unit">mm</span><input id="overlap" type="number" min="0.01" step="0.1" value="2" /></label>
+            <div class="setting-range">
+              <input id="overlap-slider" type="range" min="0.1" max="5" step="0.1" value="2" aria-label="Adjust overlap above base" aria-describedby="overlap-range-hint" disabled />
+              <p id="overlap-range-hint" class="help">Select a surface to set the overlap range.</p>
+            </div>
+            <p class="help">How far the modifier extends up into the selected feature.</p>
+            <label>Surface fill angle <span class="unit">degrees</span><input id="angle" type="number" min="1" max="60" step="1" value="20" /></label>
+            <p class="help">A higher value follows sharper bends in the surface.</p>
+            <details id="custom-settings"><summary>Use my own Bambu settings</summary><label>Bambu settings project<input id="profile" type="file" accept=".3mf" /></label><button id="default-profile" class="secondary">Use built-in default</button></details>
+            <p id="profile-info" class="help">Loading export preset…</p>
+          </details>
+        </div>
+        <section class="export-panel" aria-label="Export">
+          <div class="step-heading"><span class="step-number">3</span><h2>Take it to your slicer</h2></div>
+          <p id="status" role="status" aria-live="polite">Open an STL or try the sample to begin.</p>
+          <button id="export" disabled>Export 3MF <span aria-hidden="true">↗</span></button>
+          <p id="export-note" class="export-note">Includes default P1S 0.4 settings. Choose your printer and material in Bambu Studio.</p>
+        </section>
+      </aside>
+      <section class="workspace" aria-label="3D model preview">
+        <div id="viewport"></div>
+        <div id="empty-state" class="empty-state">
+          <svg aria-hidden="true" viewBox="0 0 96 96"><path d="M48 12 80 30v36L48 84 16 66V30Z M16 30l32 18 32-18 M48 48v36"/><path class="accent" d="m48 12 32 18-32 18-32-18Z"/></svg>
+          <h2>Start with your model</h2><p>Add an STL, select a side surface, and create<br />an aligned modifier with a depth into the base.</p>
+          <button id="empty-open">Open STL</button><span class="help">Your file stays on this computer.</span>
+        </div>
+        <div id="view-tools" class="view-tools" hidden>
+          <div class="view-buttons" role="group" aria-label="Model views"><button id="fit-view" title="Fit the whole model">Fit</button><button id="view-3d" aria-pressed="true">3D</button><button id="view-top" aria-pressed="false">Top</button></div>
+          <label class="check toggle"><input id="xray" type="checkbox" /> See inside</label>
+        </div>
+        <div id="canvas-hint" class="canvas-hint" hidden><span class="hint-dot"></span><span id="hover-info">Confirm the model dimensions to begin.</span></div>
+        <div id="legend" class="legend" hidden><span><i class="swatch side"></i>Side faces</span><span><i class="swatch selected"></i>Selection</span><span><i class="swatch modifier"></i>Modifier</span><span id="root-legend" hidden><i class="swatch root"></i>Base</span><span class="orbit-help">Drag to orbit · Scroll to zoom</span></div>
+      </section>
+    </main>
+    <dialog id="dimension-dialog" aria-labelledby="dimension-title" aria-describedby="dimension-description">
+      <span class="dialog-eyebrow">Before your first selection</span>
+      <h2 id="dimension-title">Does this size look right?</h2>
+      <p id="dimension-description">STL files don't specify units. We'll use millimetres and keep the model at this size.</p>
+      <strong id="dimension-filename" class="dimension-filename"></strong>
+      <div class="dimension-grid">
+        <div><span>Width (X)</span><strong><span id="dimension-x"></span><small> mm</small></strong></div>
+        <div><span>Depth (Y)</span><strong><span id="dimension-y"></span><small> mm</small></strong></div>
+        <div><span>Height (Z)</span><strong><span id="dimension-z"></span><small> mm</small></strong></div>
+      </div>
+      <button id="confirm-dimensions" autofocus>Confirm &amp; select surface</button>
+      <button id="cancel-dimensions" class="text-button">Go back</button>
+    </dialog>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

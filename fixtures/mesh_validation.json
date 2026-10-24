@@ -1,0 +1,317 @@
+{
+  "status": "all generated STL geometry checks passed",
+  "not_tested": [
+    "application UI",
+    "generated 3MF",
+    "Bambu import",
+    "Bambu slicing",
+    "print strength"
+  ],
+  "libraries": {
+    "numpy": "2.3.5",
+    "trimesh": "4.11.1",
+    "shapely": "2.1.2"
+  },
+  "checks": [
+    {
+      "file": "single_boss.stl",
+      "triangles": 768,
+      "watertight": true,
+      "consistent_winding": true,
+      "bounds_mm": [
+        [
+          -15.0,
+          -15.0,
+          0.0
+        ],
+        [
+          15.0,
+          15.0,
+          18.0
+        ]
+      ],
+      "volume_mm3": 4050.852412042452,
+      "expected_polyhedral_volume_mm3": 4050.8523755400806
+    },
+    {
+      "file": "single_boss_modifier_01.stl",
+      "triangles": 512,
+      "watertight": true,
+      "consistent_winding": true,
+      "bounds_mm": [
+        [
+          -6.0,
+          -6.0,
+          1.0
+        ],
+        [
+          6.0,
+          6.0,
+          6.0
+        ]
+      ],
+      "volume_mm3": 466.5615974966483,
+      "expected_polyhedral_volume_mm3": 466.5615879687081
+    },
+    {
+      "file": "straight_wall.stl",
+      "triangles": 28,
+      "watertight": true,
+      "consistent_winding": true,
+      "bounds_mm": [
+        [
+          -25.0,
+          -12.0,
+          0.0
+        ],
+        [
+          25.0,
+          12.0,
+          18.0
+        ]
+      ],
+      "volume_mm3": 6704.0,
+      "expected_polyhedral_volume_mm3": 6704.0
+    },
+    {
+      "file": "straight_wall_modifier_01.stl",
+      "triangles": 12,
+      "watertight": true,
+      "consistent_winding": true,
+      "bounds_mm": [
+        [
+          -17.0,
+          -2.0,
+          1.0
+        ],
+        [
+          17.0,
+          2.0,
+          6.0
+        ]
+      ],
+      "volume_mm3": 680.0,
+      "expected_polyhedral_volume_mm3": 680.0
+    },
+    {
+      "file": "ten_bosses.stl",
+      "triangles": 5172,
+      "watertight": true,
+      "consistent_winding": true,
+      "bounds_mm": [
+        [
+          -55.0,
+          -25.0,
+          0.0
+        ],
+        [
+          55.0,
+          25.0,
+          16.0
+        ]
+      ],
+      "volume_mm3": 32413.340719541844,
+      "expected_polyhedral_volume_mm3": 32413.340988612505
+    },
+    {
+      "file": "ten_bosses_modifier_01.stl",
+      "triangles": 512,
+      "watertight": true,
+      "consistent_winding": true,
+      "bounds_mm": [
+        [
+          -50.0,
+          -18.0,
+          1.0
+        ],
+        [
+          -38.0,
+          -6.0,
+          6.0
+        ]
+      ],
+      "volume_mm3": 466.5615690406139,
+      "expected_polyhedral_volume_mm3": 466.5615879687084
+    },
+    {
+      "file": "ten_bosses_modifier_02.stl",
+      "triangles": 512,
+      "watertight": true,
+      "consistent_winding": true,
+      "bounds_mm": [
+        [
+          -28.0,
+          -18.0,
+          1.0
+        ],
+        [
+          -16.0,
+          -6.0,
+          6.0
+        ]
+      ],
+      "volume_mm3": 466.56158730703737,
+      "expected_polyhedral_volume_mm3": 466.56158796870835
+    },
+    {
+      "file": "ten_bosses_modifier_03.stl",
+      "triangles": 512,
+      "watertight": true,
+      "consistent_winding": true,
+      "bounds_mm": [
+        [
+          -6.0,
+          -18.0,
+          1.0
+        ],
+        [
+          6.0,
+          -6.0,
+          6.0
+        ]
+      ],
+      "volume_mm3": 466.5615868179904,
+      "expected_polyhedral_volume_mm3": 466.5615879687083
+    },
+    {
+      "file": "ten_bosses_modifier_04.stl",
+      "triangles": 512,
+      "watertight": true,
+      "consistent_winding": true,
+      "bounds_mm": [
+        [
+          16.0,
+          -18.0,
+          1.0
+        ],
+        [
+          28.0,
+          -6.0,
+          6.0
+        ]
+      ],
+      "volume_mm3": 466.56158730703737,
+      "expected_polyhedral_volume_mm3": 466.56158796870835
+    },
+    {
+      "file": "ten_bosses_modifier_05.stl",
+      "triangles": 512,
+      "watertight": true,
+      "consistent_winding": true,
+      "bounds_mm": [
+        [
+          38.0,
+          -18.0,
+          1.0
+        ],
+        [
+          50.0,
+          -6.0,
+          6.0
+        ]
+      ],
+      "volume_mm3": 466.5615690406139,
+      "expected_polyhedral_volume_mm3": 466.5615879687084
+    },
+    {
+      "file": "ten_bosses_modifier_06.stl",
+      "triangles": 512,
+      "watertight": true,
+      "consistent_winding": true,
+      "bounds_mm": [
+        [
+          -50.0,
+          6.0,
+          1.0
+        ],
+        [
+          -38.0,
+          18.0,
+          6.0
+        ]
+      ],
+      "volume_mm3": 466.5615690406139,
+      "expected_polyhedral_volume_mm3": 466.5615879687083
+    },
+    {
+      "file": "ten_bosses_modifier_07.stl",
+      "triangles": 512,
+      "watertight": true,
+      "consistent_winding": true,
+      "bounds_mm": [
+        [
+          -28.0,
+          6.0,
+          1.0
+        ],
+        [
+          -16.0,
+          18.0,
+          6.0
+        ]
+      ],
+      "volume_mm3": 466.56158730703737,
+      "expected_polyhedral_volume_mm3": 466.5615879687081
+    },
+    {
+      "file": "ten_bosses_modifier_08.stl",
+      "triangles": 512,
+      "watertight": true,
+      "consistent_winding": true,
+      "bounds_mm": [
+        [
+          -6.0,
+          6.0,
+          1.0
+        ],
+        [
+          6.0,
+          18.0,
+          6.0
+        ]
+      ],
+      "volume_mm3": 466.5615868179904,
+      "expected_polyhedral_volume_mm3": 466.5615879687083
+    },
+    {
+      "file": "ten_bosses_modifier_09.stl",
+      "triangles": 512,
+      "watertight": true,
+      "consistent_winding": true,
+      "bounds_mm": [
+        [
+          16.0,
+          6.0,
+          1.0
+        ],
+        [
+          28.0,
+          18.0,
+          6.0
+        ]
+      ],
+      "volume_mm3": 466.56158730703737,
+      "expected_polyhedral_volume_mm3": 466.5615879687081
+    },
+    {
+      "file": "ten_bosses_modifier_10.stl",
+      "triangles": 512,
+      "watertight": true,
+      "consistent_winding": true,
+      "bounds_mm": [
+        [
+          38.0,
+          6.0,
+          1.0
+        ],
+        [
+          50.0,
+          18.0,
+          6.0
+        ]
+      ],
+      "volume_mm3": 466.5615690406139,
+      "expected_polyhedral_volume_mm3": 466.5615879687083
+    }
+  ]
+}
