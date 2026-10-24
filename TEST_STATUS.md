@@ -28,7 +28,7 @@ shaped caps; details and exact limits are in docs/SERVO_PILOT.md.
 | Surface feedback | Hover preview, dimension gating, selected surface, base outline and duplicate blocking checked |
 | First-click size prompt | Hover before confirmation, explicit confirm resumes the clicked surface, Go back/Esc cancellation, new-model pending-click reset and no repeated prompt checked |
 | Depth slider | Local maximum, keyboard changes, typed-value synchronization, invalid-value recovery and actual exported Z bounds checked |
-| Advanced overlap slider | Feature-height maximum, keyboard changes, typed-value synchronization, invalid-value recovery, reset on replacement and actual exported upper Z bound checked |
+| Visible overlap slider | Accessible with Advanced closed; feature-height maximum, keyboard changes, typed-value synchronization, invalid-value recovery, reset on replacement and actual exported upper Z bound checked |
 | New-selection defaults | Thin/short feature fits depth and overlap immediately after orientation/confirmation; manual base picking fits limits too; valid values persist and later typed invalid values remain errors |
 | Visible upward overlap | Rendered-image pixel check finds a distinct orange band with both selection and hover active; its upper boundary moves with overlap |
 | Explicit print orientation | Six proper axis rotations preserve scale, winding, triangle order and source input; browser bed-face rotation, dimensions reset, rotated-model export and original-orientation restoration checked |
@@ -37,7 +37,7 @@ shaped caps; details and exact limits are in docs/SERVO_PILOT.md.
 | Native drag/drop handling | Real selected-text drags blocked; synthetic text transfers ignored, file-drop import preserved, drag-end/Escape cleanup checked |
 | Camera/input handling | Orbit returning to its start does not select a face; fit, top, 3D and See inside preserve exported source coordinates |
 | Base-picking guidance | Through-bore ambiguity, invalid top click, purple base hover and recovery checked in the browser |
-| Narrow-screen layout | 390 px viewport: controls usable and no horizontal page overflow |
+| Responsive layout | 320, 390, 820 and 1440 px widths: orientation/view controls stay within the model pane, toolbar clears instructions and no horizontal page overflow |
 | Generated mesh indexing | Shared vertex indices across caps/sides; each indexed edge has two triangle uses |
 | Translated footprint/build frame | Tested; depth follows negative build Z |
 | Written 3MF geometry | Every loaded vertex/index preserved in structural round-trip tests |
@@ -50,6 +50,28 @@ approximately 199 KB gzipped application JavaScript, one 38,484-byte sample STL
 and the 10,274-byte stock settings asset. The 13 former runtime STLs totalled
 579,692 bytes; the remaining fixtures are now test/developer assets only.
 Vite reports a non-fatal warning about the uncompressed chunk exceeding 500 KB.
+
+## Viewport orientation and visible depth/overlap controls
+
+Set upright and Original orientation have moved from the model-file section to
+a Print orientation group beside Fit / 3D / Top and See inside. Set upright shows
+an active/cancel state while waiting for the bed face; the selection card explains
+that changing orientation clears selections and added modifiers. Narrow screens
+use two toolbar rows, with model instructions below the controls.
+
+Depth into base and Overlap above base are now visible together in the selection
+step, each with a number field, slider and available range. Short explanations
+identify the downward depth below the base outline and upward overlap into the
+feature. Values remain independent with the existing 3 mm / 2 mm starting values
+and automatic fit to local geometry. Advanced now contains fill angle and optional
+Bambu settings. No geometry or export algorithm changed.
+
+The full 86 core tests, 17 browser tests and production build pass. Existing
+orientation and export checks now exercise the relocated controls; overlap
+interaction/export and slider-drag checks work with Advanced closed. Layout
+checks cover 320, 390, 820 and 1440 px widths, including toolbar/hint separation.
+Desktop and narrow-screen screenshots are recorded in `artifacts/control-layout/`.
+Native Bambu checks were not rerun for this layout change.
 
 ## Immediate valid preview and overlap contrast
 
@@ -102,7 +124,8 @@ See [docs/SERVO_PILOT.md](docs/SERVO_PILOT.md) for input hash and measurements.
 
 ## Advanced overlap slider and static hosting check
 
-Advanced options now has an overlap slider alongside the number field. Its
+The initial overlap slider was added in Advanced options (it is now visible in
+the selection step, as described above). Its
 maximum is the minimum feature height (`topZ - rootZ`) across the current and
 added targets; depth and overlap share range, preview and gesture handling.
 The browser export test sets 1.6 mm overlap on the 4 mm root and checks the

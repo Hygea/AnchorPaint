@@ -150,8 +150,8 @@ function update() {
   el('confirm-row').hidden = !model;
   el('orientation-tools').hidden = !model;
   el('reset-orientation').hidden = !model || model === originalModel;
-  el('orientation-note').hidden = !chooseOrientation && model === originalModel;
-  button('orient-model').textContent = chooseOrientation ? 'Cancel orientation' : 'Model sideways? Set upright';
+  button('orient-model').textContent = chooseOrientation ? 'Cancel orientation' : 'Set upright';
+  button('orient-model').setAttribute('aria-pressed', String(chooseOrientation));
   for (const id of ['empty-state']) el(id).hidden = !!model;
   for (const id of ['view-tools', 'canvas-hint', 'legend']) el(id).hidden = !model;
   button('open-stl').textContent = model ? 'Replace STL' : 'Open STL';
@@ -179,7 +179,7 @@ function update() {
     try {
       if (!Number.isInteger(walls) || walls < 1 || walls > 100) throw new Error('Walls must be a whole number from 1 to 100.');
       if (!Number.isFinite(depth) || depth <= 0) throw new Error('Enter a depth greater than 0 mm.');
-      if (!Number.isFinite(overlap) || overlap <= 0) throw new Error('Enter an overlap greater than 0 mm in Advanced options.');
+      if (!Number.isFinite(overlap) || overlap <= 0) throw new Error('Enter an overlap greater than 0 mm.');
       modifiers = anchors.map(a => makePart(a, depth, overlap, walls));
       preview.push(...modifiers.map(m => m.mesh));
       if (candidate) {
@@ -190,7 +190,7 @@ function update() {
     viewer?.setPreview(preview, region?.triangles ?? [], candidate ? { footprint: candidate.footprint, z: candidate.rootZ } : undefined);
   }
   if (!model) showSelection(loading ? 'Loading your model…' : 'Choose a model first', 'Then confirm its dimensions to start selecting.');
-  else if (chooseOrientation) showSelection('Choose the face for the print bed', selectionError || 'Click the flat underside that should sit on the print bed. Drag to see it if needed.', selectionError ? 'error' : 'base');
+  else if (chooseOrientation) showSelection('Choose the face for the print bed', selectionError || 'Click the flat underside that should sit on the print bed. Drag to see it if needed. Changing orientation clears selections and added modifiers.', selectionError ? 'error' : 'base');
   else if (!ready) showSelection('Click a side face to start', 'We’ll ask you to confirm the size, then select that surface. You can also confirm the dimensions above.');
   else if (settingsError || candidateError) showSelection('Adjust the modifier settings', settingsError || candidateError, 'error');
   else if (selectionError) { const [title, description] = readableError(selectionError); showSelection(title, description, 'error'); }

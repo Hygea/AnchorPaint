@@ -54,7 +54,7 @@ serve the same `dist/` folder. No online deployment has been performed yet.
    its width, depth and height in millimetres. **Confirm & select surface**
    continues that same selection; no second surface click is needed. Go back or
    Esc cancels the prompt. The sidebar checkbox remains an optional alternative.
-   If it opens sideways, choose **Model sideways? Set upright** and click the
+   If it opens sideways, choose **Set upright** in the viewport toolbar and click the
    flat underside that should sit on the print bed. Drag to see that face if
    needed. This explicitly rotates the whole model in 90-degree steps, clears
    current modifiers, and asks you to confirm its dimensions again. **Original
@@ -73,9 +73,12 @@ serve the same `dist/` folder. No online deployment has been performed yet.
 3. Adjust **Depth into base** with the slider or number field. The slider uses
    the available local base depth; across several targets it uses the smallest
    limit. It updates shared depth and preview while dragged. A number typed
-   beyond the limit stays invalid until you change it. **Advanced options →
-   Overlap above base** also has a slider and number field, limited by the
-   shortest selected feature's height. Integer wall loops remain adjustable. Add more features;
+   beyond the limit stays invalid until you change it. **Overlap above base** sits
+   beside depth, with its own slider and number field, limited by the shortest
+   selected feature's height. Depth goes below the purple base outline; overlap
+   extends up into the selected feature. These settings are independent, starting
+   at 3 mm depth and 2 mm overlap before fitting to local limits. Integer wall
+   loops remain adjustable below them. Add more features;
    all targets share these settings. Remove targets or undo target changes.
 4. Export one aligned 3MF. Open it as a project in
    Bambu Studio and select your printer, filament and process. The assembly is centered on the export preset's rectangular printer bed
@@ -99,8 +102,10 @@ geometry check runs when you click, after size confirmation. **See inside** swit
 view, and **Fit / 3D / Top** help inspect or recover the view. Orange volumes are
 shown through the model, above the selection/hover tint, with dark orange upper
 edges so both depth and upward overlap remain visible. **Esc** cancels a selection;
-**Undo** (Ctrl+Z outside text fields) restores target changes. Overlap and surface
-fill angle are in Advanced options. Export remains visible at the bottom.
+**Undo** (Ctrl+Z outside text fields) restores target changes. **Set upright** and
+**Original orientation** sit alongside the camera controls; selecting a print
+orientation changes the working model's frame. Surface fill angle and optional
+Bambu settings are in Advanced options. Export remains visible at the bottom.
 
 Joined/branching features, irregular walls, tapers, fillets, sloped supporting
 bases and broken meshes are rejected. A click on a bore that continues through

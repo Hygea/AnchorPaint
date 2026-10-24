@@ -23,24 +23,30 @@
               <button id="open-stl" class="secondary">Open STL</button>
               <button id="sample" class="text-button">Or try a sample</button>
             </div>
-            <div id="orientation-tools" hidden>
-              <button id="orient-model" class="text-button">Model sideways? Set upright</button>
-              <button id="reset-orientation" class="text-button" hidden>Original orientation</button>
-              <p id="orientation-note" class="help" hidden>Orientation changes clear selections and added modifiers.</p>
-            </div>
             <label id="confirm-row" class="check" hidden><input id="confirm" type="checkbox" /> These dimensions are correct (mm)</label>
           </section>
           <section class="step" id="select-step">
             <div class="step-heading"><span class="step-number">2</span><h2>Select a surface</h2></div>
             <p class="help">Hover a blue side face, then click. The selection follows the surface around the feature.</p>
-            <div class="pair">
-              <label>Depth into base <span class="unit">mm</span><input id="depth" type="number" min="0.01" step="0.1" value="3" disabled /></label>
-              <label>Walls in modifier<input id="walls" type="number" min="1" max="100" step="1" value="4" disabled /></label>
+            <div class="pair dimension-settings">
+              <div>
+                <label><span class="setting-label">Depth into base <span class="unit">mm</span></span><input id="depth" type="number" min="0.01" step="0.1" value="3" aria-describedby="depth-description" disabled /></label>
+                <p id="depth-description" class="setting-description">Below the base outline</p>
+                <div class="setting-range">
+                  <input id="depth-slider" type="range" min="0.1" max="5" step="0.1" value="3" aria-label="Adjust depth into base" aria-describedby="depth-description depth-range-hint" disabled />
+                  <p id="depth-range-hint" class="help">Select a surface to set the depth range.</p>
+                </div>
+              </div>
+              <div>
+                <label><span class="setting-label">Overlap above base <span class="unit">mm</span></span><input id="overlap" type="number" min="0.01" step="0.1" value="2" aria-describedby="overlap-description" disabled /></label>
+                <p id="overlap-description" class="setting-description">Up into the feature</p>
+                <div class="setting-range">
+                  <input id="overlap-slider" type="range" min="0.1" max="5" step="0.1" value="2" aria-label="Adjust overlap above base" aria-describedby="overlap-description overlap-range-hint" disabled />
+                  <p id="overlap-range-hint" class="help">Select a surface to set the overlap range.</p>
+                </div>
+              </div>
             </div>
-            <div class="setting-range">
-              <input id="depth-slider" type="range" min="0.1" max="5" step="0.1" value="3" aria-label="Adjust depth into base" aria-describedby="depth-range-hint" disabled />
-              <p id="depth-range-hint" class="help">Select a surface to set the depth range.</p>
-            </div>
+            <label class="wall-setting">Walls in modifier<input id="walls" type="number" min="1" max="100" step="1" value="4" disabled /></label>
             <div id="selection-card" class="selection-card" data-state="idle">
               <strong id="selection-title">Choose a model first</strong>
               <p id="selection-info">Then confirm its dimensions to start selecting.</p>
@@ -54,12 +60,6 @@
           </section>
           <details id="advanced" class="advanced">
             <summary>Advanced options</summary>
-            <label>Overlap above base <span class="unit">mm</span><input id="overlap" type="number" min="0.01" step="0.1" value="2" /></label>
-            <div class="setting-range">
-              <input id="overlap-slider" type="range" min="0.1" max="5" step="0.1" value="2" aria-label="Adjust overlap above base" aria-describedby="overlap-range-hint" disabled />
-              <p id="overlap-range-hint" class="help">Select a surface to set the overlap range.</p>
-            </div>
-            <p class="help">How far the modifier extends up into the selected feature.</p>
             <label>Surface fill angle <span class="unit">degrees</span><input id="angle" type="number" min="1" max="60" step="1" value="20" /></label>
             <p class="help">A higher value follows sharper bends in the surface.</p>
             <details id="custom-settings"><summary>Use my own Bambu settings</summary><label>Bambu settings project<input id="profile" type="file" accept=".3mf" /></label><button id="default-profile" class="secondary">Use built-in default</button></details>
@@ -83,6 +83,10 @@
         <div id="view-tools" class="view-tools" hidden>
           <div class="view-buttons" role="group" aria-label="Model views"><button id="fit-view" title="Fit the whole model">Fit</button><button id="view-3d" aria-pressed="true">3D</button><button id="view-top" aria-pressed="false">Top</button></div>
           <label class="check toggle"><input id="xray" type="checkbox" /> See inside</label>
+          <div id="orientation-tools" class="view-buttons" role="group" aria-label="Print orientation" hidden>
+            <button id="orient-model" aria-pressed="false" title="Choose the flat underside that should sit on the print bed">Set upright</button>
+            <button id="reset-orientation" title="Restore the original STL orientation" hidden>Original orientation</button>
+          </div>
         </div>
         <div id="canvas-hint" class="canvas-hint" hidden><span class="hint-dot"></span><span id="hover-info">Confirm the model dimensions to begin.</span></div>
         <div id="legend" class="legend" hidden><span><i class="swatch side"></i>Side faces</span><span><i class="swatch selected"></i>Selection</span><span><i class="swatch modifier"></i>Modifier</span><span id="root-legend" hidden><i class="swatch root"></i>Base</span><span class="orbit-help">Drag to orbit · Scroll to zoom</span></div>

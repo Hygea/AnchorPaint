@@ -50,7 +50,7 @@ test('a new thin, short feature immediately fits both defaults and still validat
   await expect(page.locator('#selection-info')).toContainText('Depth set to 2 mm; Overlap set to 1.2 mm');
   await page.locator('#depth').fill('2.5'); await expect(page.locator('#add-target')).toBeDisabled();
   await page.locator('#view-top').click(); await expect(page.locator('#depth')).toHaveValue('2.5');
-  await page.locator('#depth').fill('1.5'); await advanced(page);
+  await page.locator('#depth').fill('1.5');
   await page.locator('#overlap').fill('1.3'); await expect(page.locator('#add-target')).toBeDisabled();
   await page.locator('#xray').check(); await expect(page.locator('#overlap')).toHaveValue('1.3');
   await page.locator('#overlap').fill('0.7'); await page.locator('#add-target').click();
@@ -84,7 +84,7 @@ test('the orange overlap stays distinct during selection/hover and its upper bou
     }, png.toString('base64'));
   }
   const initial = await orangeBand(); expect(initial.count).toBeGreaterThan(1000);
-  await advanced(page); await page.locator('#overlap').fill('4');
+  await page.locator('#overlap').fill('4');
   await page.mouse.move(single.x, single.y);
   const raised = await orangeBand();
   expect(raised.top).toBeLessThan(initial.top - 15);
@@ -100,9 +100,13 @@ test('AnchorPaint orients a sideways capped pin, exports the complete rotated mo
   await page.goto('/'); await expect(page).toHaveTitle('AnchorPaint');
   await page.locator('#stl').setInputFiles(stlPayload(sideways, 'sideways_pin.stl'));
   await expect(page.locator('#dimensions')).toHaveText('9.0 × 30.0 × 30.0 mm');
-  await page.locator('#orient-model').click();
+  const orientation = page.getByRole('group', { name: 'Print orientation' });
+  await expect(page.locator('#view-tools')).toContainText('Set upright');
+  await orientation.getByRole('button', { name: 'Set upright', exact: true }).click();
+  await expect(page.locator('#orient-model')).toHaveAttribute('aria-pressed', 'true');
   await expect(page.locator('#selection-title')).toHaveText('Choose the face for the print bed');
   await page.keyboard.press('Escape');
+  await expect(page.locator('#orient-model')).toHaveAttribute('aria-pressed', 'false');
   await expect(page.locator('#reset-orientation')).toBeHidden();
   await page.locator('#orient-model').click();
   await page.mouse.move(950, 600);
@@ -114,7 +118,6 @@ test('AnchorPaint orients a sideways capped pin, exports the complete rotated mo
   await expect(page.getByRole('dialog')).toBeVisible();
   await page.locator('#confirm-dimensions').click();
   await expect(page.locator('#selection-title')).toHaveText('Round post selected');
-  await advanced(page);
   await expect(page.locator('#overlap-slider')).toHaveAttribute('max', '3');
   await page.locator('#overlap').fill('1.5'); await page.locator('#depth').fill('2');
   await page.locator('#add-target').click();
@@ -138,7 +141,6 @@ test('a concave cap limits overlap and exports below the indentation', async ({ 
   await page.mouse.click(884, 537);
   await expect(page.locator('#selection-title')).toHaveText('Round post selected');
   await expect(page.locator('#selection-facts')).toContainText('Overlap stops below cap');
-  await advanced(page);
   expect(Number(await page.locator('#overlap-slider').getAttribute('max'))).toBeCloseTo(2.6, 5);
   await page.locator('#overlap').fill('2.7'); await expect(page.locator('#add-target')).toBeDisabled();
   await page.locator('#overlap-slider').focus(); await page.keyboard.press('End');
@@ -239,9 +241,11 @@ test('depth slider follows the local limit and number field, and its value reach
   expect(output.volumes[1].stats.bounds.max[2]).toBe(6);
 });
 
-test('advanced overlap slider follows feature height and changes the exported volume', async ({ page }) => {
-  await page.goto('/'); await load(page); await advanced(page);
+test('visible overlap slider follows feature height and changes the exported volume with Advanced closed', async ({ page }) => {
+  await page.goto('/'); await load(page);
   const slider = page.getByRole('slider', { name: 'Adjust overlap above base' });
+  await expect(slider).toBeVisible();
+  await expect(page.locator('#advanced')).not.toHaveAttribute('open');
   await expect(slider).toBeDisabled();
   await clickSide(page);
   await expect(slider).toBeEnabled();
@@ -319,7 +323,6 @@ test('slider drags stay on their controls when the pointer leaves them', async (
   page.on('download', () => downloads++);
   await page.goto('/'); await load(page); await clickSide(page);
   for (const setting of ['depth', 'overlap']) {
-    if (setting === 'overlap') await advanced(page);
     const slider = page.locator(`#${setting}-slider`);
     await slider.scrollIntoViewIfNeeded();
     const box = (await slider.boundingBox())!, y = box.y + box.height / 2;
@@ -456,7 +459,7 @@ test('new or invalid models clear targets and reset dimension confirmation', asy
 
 test('bore selection requests a base click and recovers from clicking a top face', async ({ page }) => {
   await page.goto('/'); await load(page);
-  await page.locator('#depth').fill('10'); await advanced(page); await page.locator('#overlap').fill('20');
+  await page.locator('#depth').fill('10'); await page.locator('#overlap').fill('20');
   // Looking into the bore from above hits its inner side, which extends below
   // the feature root. The flat base then establishes the correct starting plane.
   await page.mouse.click(880, 405);
@@ -484,6 +487,26 @@ test('small screens keep model controls and export usable without page overflow'
   await page.locator('#confirm').check();
   await page.locator('#view-top').click();
   await expect(page.locator('#view-top')).toHaveAttribute('aria-pressed', 'true');
-  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  await page.locator('#orient-model').click();
+  await expect(page.locator('#selection-title')).toHaveText('Choose the face for the print bed');
+  await page.keyboard.press('Escape');
+  await expect(page.locator('#orient-model')).toHaveAttribute('aria-pressed', 'false');
+  await expect(page.locator('#overlap-slider')).toBeVisible();
+  await expect(page.locator('#advanced')).not.toHaveAttribute('open');
+  for (const width of [320, 390, 820, 1440]) {
+    await page.setViewportSize({ width, height: 844 });
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+    const workspace = (await page.locator('.workspace').boundingBox())!;
+    const toolbar = (await page.locator('#view-tools').boundingBox())!;
+    const hint = (await page.locator('#canvas-hint').boundingBox())!;
+    expect(toolbar.x).toBeGreaterThanOrEqual(workspace.x);
+    expect(toolbar.x + toolbar.width).toBeLessThanOrEqual(workspace.x + workspace.width);
+    expect(toolbar.y + toolbar.height).toBeLessThan(hint.y);
+    for (const id of ['fit-view', 'view-top', 'xray', 'orient-model']) {
+      const control = (await page.locator(`#${id}`).boundingBox())!;
+      expect(control.x).toBeGreaterThanOrEqual(toolbar.x);
+      expect(control.x + control.width).toBeLessThanOrEqual(toolbar.x + toolbar.width);
+    }
+  }
   await expect(page.locator('#export')).toBeDisabled();
 });

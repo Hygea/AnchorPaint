@@ -58,8 +58,9 @@ this is not a 3D CSG kernel. See its [primary documentation](https://github.com/
 ## Decisions
 
 **One product workflow.** Load → select → export replaces the export-spike
-workbench. Depth and wall count are the primary controls; overlap, fill angle
-and custom settings are collapsed. Export stays visible independently of sidebar
+workbench. Depth and overlap are visible side by side with sliders, number fields
+and short explanations relative to the base outline; wall count sits below them.
+Only fill angle and custom settings are collapsed. Export stays visible independently of sidebar
 scrolling. A single optional sample replaces 13 bundled STL assets: runtime
 mesh data fell from 579,692 bytes to 38,484 bytes. The full fixture library and
 baseline export remain available to tests/developer tools. No dependency was added.
@@ -102,7 +103,8 @@ including visible rejection for out-of-range values. Slider input updates its
 numeric setting and schedules one shared preview update per frame; release
 commits immediately. Export/add are disabled during a pending update to avoid
 exporting a previous slider value. Slider interaction does not change source
-coordinates or the root.
+coordinates or the root. Values remain independent (initial depth 3 mm, overlap
+2 mm) because available support below and feature height above need not match.
 
 **Valid settings on a new selection.** Once a newly derived candidate has local
 limits, current valid depth/overlap values are retained. Values outside those
@@ -149,7 +151,12 @@ an additional feature-boundary rule beyond the current MVP.
 **Explicit printing orientation.** The servo-adapter pilot exposed pins pointing
 along source -X. Normal side filling assumed build +Z, so it picked the wrong
 surfaces despite the model looking upright after orbiting the camera. Set upright
-now lets the user select the flat face to put on the print bed. That face's
+and Original orientation are grouped in the viewport toolbar beside camera
+controls, with a separate Print orientation label for assistive technology. The
+toolbar uses two rows on narrow screens, leaving instructions below its controls.
+Set upright has a pressed/cancel state and asks for the flat face to put on the
+print bed. Guidance about clearing modifiers appears while choosing that face.
+That face's
 outward normal becomes -Z. One proper, integer axis permutation rotates the
 entire working mesh, preserving scale, winding, triangle order and every
 coordinate exactly apart from axis order/sign. The six signed axes are supported;
