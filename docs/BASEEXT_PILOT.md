@@ -4,7 +4,7 @@ Date: 2026-10-23. Development test; complete MVP acceptance remains open.
 
 ## Input and supported target
 
-User-provided file: `baseext.stl`.
+User-provided file: `baseext.stl` (kept outside the source repository).
 SHA-256: `57448f0fea23e9e2d2c5a8247a10e786f767d8db5f45052450c243eddb084789`.
 The source was read without modification and is not bundled in the browser app.
 

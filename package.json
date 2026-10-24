@@ -14,6 +14,7 @@
     "test": "node --import tsx --test tests/geometry.test.ts tests/export.test.ts tests/profile.test.ts tests/selection.test.ts",
     "test:watch": "node --watch --import tsx --test tests/geometry.test.ts tests/export.test.ts tests/profile.test.ts tests/selection.test.ts",
     "test:ui": "playwright test",
+    "test:site": "playwright test --config playwright.production.config.ts",
     "spike:export": "tsx tools/export-fixtures.ts",
     "spike:inspect": "tsx tools/inspect-3mf.ts",
     "spike:verify-bambu": "tsx tools/verify-bambu.ts",

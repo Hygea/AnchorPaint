@@ -16,6 +16,7 @@ shaped caps; details and exact limits are in docs/SERVO_PILOT.md.
 | --- | --- |
 | Geometry, export, selection and settings-source tests | **86 passed**, Node test runner |
 | Browser interaction/download tests | **17 passed**, Playwright with installed Chrome |
+| Production browser acceptance | **1 passed**, built files served by Vite preview under `/AnchorPaint/`; JS/CSS/sample/preset loading, rendered modifier, download, local-file privacy and console checks |
 | TypeScript check and production build | **Passed** |
 | Dependency audit | **0 reported vulnerabilities** after dependency selection |
 | All 15 reference STLs reloaded | Closed, consistent winding, positive volumes and expected bounds checked |
@@ -50,6 +51,47 @@ approximately 199 KB gzipped application JavaScript, one 38,484-byte sample STL
 and the 10,274-byte stock settings asset. The 13 former runtime STLs totalled
 579,692 bytes; the remaining fixtures are now test/developer assets only.
 Vite reports a non-fatal warning about the uncompressed chunk exceeding 500 KB.
+
+## GitHub Pages and v0.1.0 preparation
+
+The release-preparation task completed a clean `npm ci` (zero reported
+vulnerabilities), all 86 geometry/export/profile/selection tests, all 17 existing
+browser tests, the TypeScript/production build and one new production browser
+acceptance test. Local runtime: Windows, Node 23.10.0, installed Chrome. The
+workflow specifies Node.js 24 on Ubuntu; a successful GitHub-hosted run has not
+yet been recorded here.
+
+The built site was served with `npm run preview -- --base /AnchorPaint/` and
+tested at the case-sensitive project prefix. The browser loaded JavaScript,
+CSS, sample STL and stock 3MF settings, selected the sample shaft, changed depth
+to 1.5 mm and overlap to 1.2 mm, rendered an orange modifier and downloaded a
+two-volume 3MF. Its source mesh matched every loaded vertex/index; modifier
+bounds were Z=2.5–5.2 mm. Local STL and custom settings inputs also loaded with
+no network uploads. Only same-origin GETs below `/AnchorPaint/` were observed;
+there were no missing assets or browser errors in the passing run. A first
+production run caught a missing browser favicon; an app-owned SVG icon and
+relative icon link fixed that 404 before the successful repeat.
+
+The relative Vite base remains `./`; both existing root development tests and
+the exact production subpath pass. The built app JavaScript/CSS hashes and the
+bundled preset content are unchanged; geometry and export behavior were not
+modified. Third-party notices and the favicon are additional static site files.
+No new runtime dependency was introduced. The existing non-fatal large-chunk
+warning remains.
+
+`.github/workflows/deploy.yml` builds/tests PRs and uploads only `dist/`.
+Successful main push/manual builds can deploy through the `github-pages`
+environment. Official action releases were checked and pinned on 2026-10-24.
+No Pages settings, repository visibility, release tag or GitHub Release was
+changed. The site is **prepared, not verified published**; release approval is
+blocked by the original-code license, bundled preset redistribution review and
+the owner decision about a personal path retained in Git history. See
+[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md),
+[docs/PUBLIC_RELEASE_AUDIT.md](docs/PUBLIC_RELEASE_AUDIT.md) and the
+[draft v0.1.0 notes](docs/releases/v0.1.0.md).
+
+Native Bambu/Orca checks were not rerun for this deployment-only preparation.
+Their existing evidence and limitations below remain unchanged.
 
 ## Viewport orientation and visible depth/overlap controls
 

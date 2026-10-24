@@ -238,3 +238,22 @@ run here on Node 23.10.0.
 - The folder was not a Git checkout. No existing branch/history was changed.
 
 The current status of every acceptance gate is recorded in TEST_STATUS.md.
+
+## Static publication preparation
+
+The existing relative Vite base is retained so the same artifact works locally
+at `/` and below the case-sensitive `/AnchorPaint/` project path. A separate
+production Playwright config mounts Vite preview under that prefix and checks
+runtime assets, real selection/preview, settings, exported bounds and absence of
+model uploads. Existing geometry and UI suites stay intact. The production
+check is included in a Node.js 24 GitHub Actions build; only `dist/` is uploaded.
+Pull requests build only; main push/manual runs may deploy in `github-pages`.
+Deployment write/OIDC permissions are scoped to the deploy job, official
+actions are pinned and concurrent same-ref runs are serialized.
+
+Notices for distributed runtime dependencies and the Earcut code inside Three.js
+are static files copied into the build. No original-code license was selected.
+Public publication is held for the owner's license, Bambu preset redistribution
+and historical-path privacy decisions. A draft release and manual activation
+checklist are prepared; none of this changes modifier geometry or native export.
+See docs/PUBLIC_RELEASE_AUDIT.md and docs/DEPLOYMENT.md.

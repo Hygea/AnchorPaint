@@ -1,10 +1,59 @@
 # AnchorPaint
 
-A local-first development preview for generating aligned slicer modifier volumes.
-**Current milestone: local STL loading, click/Smart Fill and aligned export.**
-Supports isolated upright round bosses (with optional bore) and rectangular
-straight walls on horizontal bases. See [TEST_STATUS.md](TEST_STATUS.md) for
-tested behavior and open acceptance gates.
+Paint a supported STL surface and export an aligned slicer modifier extending
+into its base. AnchorPaint finds the footprint and position for you, so you can
+reinforce several features without manually aligning cylinders or boxes.
+
+**Experimental MVP preview, version 0.1.0.** Planned web app:
+[hygea.github.io/AnchorPaint](https://hygea.github.io/AnchorPaint/) — **deployment
+has not been published or verified yet**. Publication is on hold for the licensing
+and privacy decisions in [the public-release audit](docs/PUBLIC_RELEASE_AUDIT.md).
+No desktop installation, backend or end-user account is required by the app.
+
+## Getting started
+
+1. Open an STL or try the included sample. If necessary, use **Set upright** in
+   the viewport and choose the flat underside for the print bed.
+2. Click a blue side surface and confirm the model dimensions in millimetres.
+3. Adjust **Depth into base**, **Overlap above base** and wall count. Review the
+   orange preview and purple base outline, then **Add modifier**. Repeat for more
+   supported features; all modifiers share these settings.
+4. **Export 3MF**, open it as a project in your slicer, select your actual printer
+   and material, and inspect the sliced layers before printing.
+
+Supports isolated upright solid/hollow round bosses and straight rectangular
+walls on horizontal bases, including straight pin shafts below supported shaped
+caps. Tapers, filleted roots, sloping bases, joined/branching features and mesh
+repair are outside this MVP. It creates separate settings modifiers and does not
+promise improved print strength. [Full scope](MVP_SPEC.md).
+
+| Slicer | Recorded compatibility |
+| --- | --- |
+| Bambu Studio 2.8.2.61 | Actual import/save round trips; selected GUI import/slicing checks. Full comparative layer/physical validation remains open. |
+| OrcaSlicer 2.4.2 portable | User reports correct placement, wall-loop overrides and slicing, with a shell-setting substitution warning. Save/reopen unverified. |
+| PrusaSlicer and other versions | Untested. |
+
+See [verification details](TEST_STATUS.md), [architecture](docs/ARCHITECTURE.md)
+and the [publication checklist](docs/DEPLOYMENT.md).
+
+## Privacy
+
+STL and optional settings files are read and processed in your browser. The app
+has no upload endpoint, analytics, external fonts or tracking requests. Geometry
+and 3MF generation run locally; downloads are created in the browser. The hosted
+version still requests its own JavaScript, CSS, sample and preset from GitHub
+Pages. GitHub processes normal site requests, including IP logging under its
+[hosting/privacy practices](https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages#data-collection).
+Local processing does not mean the website makes no network requests.
+
+## License and release status
+
+No license for AnchorPaint's original code has been selected by the owner yet.
+Third-party components retain their own licenses; their full notices are in
+[public/THIRD_PARTY_NOTICES.txt](public/THIRD_PARTY_NOTICES.txt), also copied into
+the built site. The bundled Bambu stock preset has a separate unresolved
+redistribution review. Public distribution and the v0.1.0 release remain on hold;
+see [audit findings](docs/PUBLIC_RELEASE_AUDIT.md) and [draft release notes](docs/releases/v0.1.0.md).
 
 ## Run locally
 
@@ -12,12 +61,12 @@ Use Node.js 22.12+ or 24 LTS and a browser with WebGL. No Python or Bambu instal
 is needed to run the workbench itself.
 
 ```powershell
-npm install
+npm ci
 npm run dev
 ```
 
 Open the loopback address printed by Vite, normally `http://127.0.0.1:5173`.
-For a repeat install use `npm ci`. Dependencies are pinned and locked. After
+Dependencies are pinned and locked. After
 dependencies are installed, the app needs no Internet connection, account or API.
 Files stay on this computer.
 
@@ -32,21 +81,23 @@ npm run build
 npm run preview
 ```
 
-The first command creates `dist/`, the folder to publish. The second previews
-that build locally; it is not a production server. The build already uses
-relative asset paths (`base: './'`) and has been checked under a
-`/modifier-painter/` URL prefix with sample loading, selection and 3MF download.
+The first command creates `dist/`; the second serves a local build preview.
+Relative asset paths (`base: './'`) keep the same build usable at `/` locally
+and `/AnchorPaint/` on Pages. `npm run test:site` runs a production browser check
+under the exact `/AnchorPaint/` prefix using `npm run preview`.
 
-**GitHub Pages is a suitable simple option.** Put the source in a GitHub
-repository, choose **Settings → Pages → GitHub Actions**, and use the
-[official Vite deployment workflow](https://vite.dev/guide/static-deploy.html#github-pages)
-to install dependencies, run `npm run build` and publish only `dist/`.
-Use Node 22.12+ or 24 LTS for that build. GitHub can build future source updates
-and publish them automatically. A custom server or domain is unnecessary;
-the default address is `https://<owner>.github.io/<repository>/`.
-[GitHub Pages](https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages)
-is available with GitHub Free for public repositories. Other static hosts can
-serve the same `dist/` folder. No online deployment has been performed yet.
+[.github/workflows/deploy.yml](.github/workflows/deploy.yml) uses Node.js 24,
+`npm ci`, geometry/export tests, the production build and a browser acceptance
+check. Pull requests build and test only. Pushes to `main` and manual runs on
+`main` also deploy **only `dist/`** to the `github-pages` environment after the
+build passes. Official GitHub actions are pinned to reviewed release commits;
+deployment permissions belong only to the deploy job. No application secrets or
+server infrastructure are needed, and generated files stay out of Git.
+
+The owner must resolve publication blockers and enable Pages first. Follow
+[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md), including the private-repository plan
+requirements and live-site acceptance check. The workflow has been prepared;
+no successful public deployment or release is claimed.
 
 ## Try your own STL
 
