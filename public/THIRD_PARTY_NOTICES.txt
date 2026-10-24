@@ -1,10 +1,20 @@
 AnchorPaint third-party notices
 
-These licenses cover the named third-party components, not AnchorPaint original
-code or the Bambu preset. No license for original code has been selected yet.
-The bundled Bambu system-preset asset has a separate, unresolved redistribution
-review: https://github.com/Hygea/AnchorPaint/blob/main/docs/PUBLIC_RELEASE_AUDIT.md
-Bambu upstream: https://github.com/bambulab/BambuStudio
+AnchorPaint original code: MIT (licenses/AnchorPaint-MIT.txt).
+Third-party terms below apply only to their named components.
+
+Bambu Studio stock preset — AGPL-3.0-only
+
+Bambu Lab and contributors; based on PrusaSlicer and Slic3r. The original
+AnchorPaint code is MIT. The Bambu stock preset and its source templates retain
+the upstream AGPL v3 terms; they are not relicensed as MIT.
+
+Full preset license: licenses/BambuStudio-AGPL-3.0.txt
+Editable preset and all 17 source templates: preset-source/README.txt
+Source manifest: preset-source/manifest.json
+Upstream: https://github.com/bambulab/BambuStudio/tree/926a7192574bcb9b3a732e1ec59a46d79cb45466
+
+The paths above are relative to the root of the built site.
 
 @nodable/entities 3.1.0 — MIT
 Source: https://github.com/nodable/val-parsers/blob/b89ecb0d419969e2989b74c5304bc9b66931727e/LICENSE

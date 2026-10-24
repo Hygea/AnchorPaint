@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Local-first STL modifier export proof of concept",
+  "description": "Browser-based STL surface selection and aligned slicer modifier export",
   "engines": {
     "node": ">=22.12.0"
   },
@@ -18,7 +18,8 @@
     "spike:export": "tsx tools/export-fixtures.ts",
     "spike:inspect": "tsx tools/inspect-3mf.ts",
     "spike:verify-bambu": "tsx tools/verify-bambu.ts",
-    "profile:build-default": "tsx tools/build-default-profile.ts"
+    "profile:build-default": "tsx tools/build-default-profile.ts",
+    "profile:rebuild": "tsx tools/rebuild-default-profile.ts"
   },
   "dependencies": {
     "fast-xml-parser": "5.11.2",
@@ -33,5 +34,6 @@
     "tsx": "4.23.15",
     "typescript": "5.9.3",
     "vite": "7.3.7"
-  }
+  },
+  "license": "MIT AND AGPL-3.0-only"
 }

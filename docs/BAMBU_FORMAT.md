@@ -67,8 +67,7 @@ are excluded. The chosen settings payload is retained byte-for-byte, including
 any custom snippets it already contains. No code edits or generates printer
 G-code. A custom source may cause Bambu to display its own modified-preset warning.
 
-The original prototype required a local source project. Following the user's
-workflow clarification, the app now loads the bundled stock default automatically
+The app loads the bundled stock default automatically
 and labels it clearly. Printer, filament and process can be selected in Bambu;
 custom settings remain an optional override. This is still a native settings
 payload, not a profile-free export. A deliberately named `--diagnostic-no-profile` option reproduces the

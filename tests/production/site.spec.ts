@@ -4,6 +4,8 @@ import { resolve } from 'node:path';
 import { inspect3mf } from '../../tools/inspect-3mf';
 import { parseStl } from '../../src/core/mesh';
 import { settingsProject } from '../settings-project';
+import { unzipSync } from 'fflate';
+import { createHash } from 'node:crypto';
 
 test('production subpath loads local assets, previews a modifier and exports without model uploads', async ({ page }) => {
   const errors: string[] = [], unexpectedRequests: string[] = [], failedResponses: string[] = [];
@@ -50,7 +52,8 @@ test('production subpath loads local assets, previews a modifier and exports wit
   await page.locator('#add-target').click();
   await expect(page.locator('#target-count')).toHaveText('1');
   const downloaded = page.waitForEvent('download'); await page.locator('#export').click();
-  const output = inspect3mf((await (await downloaded).path())!);
+  const outputPath = (await (await downloaded).path())!;
+  const output = inspect3mf(outputPath);
   expect(output.volumes).toHaveLength(2);
   expect(output.volumes[1].stats.bounds.min[2]).toBeCloseTo(2.5, 5);
   expect(output.volumes[1].stats.bounds.max[2]).toBeCloseTo(5.2, 5);
@@ -60,6 +63,23 @@ test('production subpath loads local assets, previews a modifier and exports wit
   for (const suffix of ['.js', '.css', '.stl', '.3mf']) expect(paths.some(path => path.endsWith(suffix))).toBe(true);
   const notices = await page.request.get('./THIRD_PARTY_NOTICES.txt');
   expect(notices.ok()).toBe(true); expect(await notices.text()).toContain('Mapbox');
+  await expect(page.getByRole('link', { name: 'Licenses & credits' })).toHaveAttribute('href', './THIRD_PARTY_NOTICES.txt');
+  const license = await page.request.get('./licenses/BambuStudio-AGPL-3.0.txt');
+  expect(license.ok()).toBe(true); expect(await license.text()).toContain('GNU AFFERO GENERAL PUBLIC LICENSE');
+  const mit = await page.request.get('./licenses/AnchorPaint-MIT.txt');
+  expect(mit.ok()).toBe(true); expect(await mit.text()).toContain('Copyright (c) 2026 Hygea');
+  const manifestResponse = await page.request.get('./preset-source/manifest.json');
+  expect(manifestResponse.ok()).toBe(true);
+  const manifest = await manifestResponse.json();
+  expect(manifest.sources).toHaveLength(17);
+  const editable = await page.request.get('./preset-source/default-settings.json');
+  expect(editable.ok()).toBe(true);
+  expect(unzipSync(await readFile(outputPath))['Metadata/project_settings.config']).toEqual(new Uint8Array(await editable.body()));
+  for (const source of manifest.sources) {
+    const resource = await page.request.get(`./preset-source/${source.path}`);
+    expect(resource.ok()).toBe(true);
+    expect(createHash('sha256').update(await resource.body()).digest('hex')).toBe(source.sha256);
+  }
 
   // Selecting private files must not add a network transfer. The existing UI
   // suite tests their full export behavior; here we check the built app's boundary.
