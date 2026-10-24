@@ -30,6 +30,8 @@ line-ending normalization. The preset archive itself is unchanged:
 SHA-256 e5b05dcb13c04697ab267c62b92a53eae63a168397814f1da61b137b12de5ce0,
 10,274 bytes. Source paths in the manifest are repository-relative, with no
 private filesystem paths or account/device data.
+The resolved JSON preserves Bambu's CRLF line endings; .gitattributes disables
+newline conversion for this one file so Linux checkouts reproduce the same archive.
 
 The full license and editable sources are copied into the static site with the
 preset. Public availability therefore does not depend on opening the source

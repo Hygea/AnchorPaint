@@ -34,8 +34,9 @@ A historical personal-directory reference was redacted from the current source.
 Both known branches, main and release/pages-v0.1.0, were rewritten with expected-head
 leases; the seven affected historical commits were checked after rewriting. No
 remote backup branch retains the removed path. GitHub
-may retain old commit/PR caches after references are rewritten; a maintainer who
-needs complete platform erasure must review those records with GitHub Support.
+still serves an old copy by its commit ID after the rewrite. Complete platform
+cache erasure is therefore not verified; a maintainer requiring that erasure
+must review the retained commit/PR records with GitHub Support.
 This is distinct from removing a line in the latest file. Do not merge older
 clones into cleaned history, because doing so can restore the removed data.
 [GitHub history-removal guidance](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/removing-sensitive-data-from-a-repository).

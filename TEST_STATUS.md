@@ -38,6 +38,9 @@ load, a supported shaft is selected, depth 1.5/overlap 1.2 yields Z=2.5–5.2 mm
 orange modifier renders and a two-volume 3MF downloads. Local STL and optional
 settings inputs generate no upload requests; the tested app requests only local
 site resources. The source/license snapshot is also served with the artifact.
+Exact preset-source bytes are checked: Bambu's resolved JSON preserves CRLF
+line endings via a file-specific .gitattributes rule. This prevents checkout
+normalization from changing the reproduced archive on Linux.
 
 Commands and environment setup are in [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md).
 The local baseline used Windows/Node 23.10.0/Chrome; CI uses supported Node.js 24.
