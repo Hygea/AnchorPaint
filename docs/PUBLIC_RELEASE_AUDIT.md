@@ -2,7 +2,8 @@
 
 Review date: 2026-10-24. Version: 0.1.0 experimental preview.
 This document records technical/privacy/licensing preparation. Public deployment
-and release approval are separate maintainer actions.
+and release approval are separate maintainer actions; both were authorized for
+the first experimental release on 2026-10-24.
 
 ## Licensing and distribution
 
@@ -70,6 +71,8 @@ in TEST_STATUS.md. Native slicer and physical tests were not rerun.
 
 Version 0.1.0 remains an experimental initial release. The npm package stays
 private to prevent accidental npm publishing; that setting is independent of
-GitHub repository visibility. The repository and Pages site are now public;
-final approval of a version tag and GitHub Release remains separate.
+GitHub repository visibility. The repository and Pages site are public, and the
+maintainer authorized [release v0.1.0](https://github.com/Hygea/AnchorPaint/releases/tag/v0.1.0)
+on 2026-10-24. The release records a tested baseline rather than universal slicer
+compatibility or a physical-strength guarantee.
 [Deployment reference](DEPLOYMENT.md).

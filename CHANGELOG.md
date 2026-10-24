@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.1.0 — unreleased
+## 0.1.0 — 2026-10-24
 
 Initial experimental preview:
 
@@ -11,6 +11,7 @@ Initial experimental preview:
 - Multiple modifiers with shared depth, overlap and wall settings; remove/undo.
 - Aligned native 3MF export with stock or optional custom Bambu settings.
 - Static GitHub Pages build and production browser acceptance checks.
+- Public Pages deployment and live browser selection/preview/export acceptance.
 
 Original code is MIT licensed; the bundled stock preset retains separate
 upstream AGPL terms with license, notices and editable source included.

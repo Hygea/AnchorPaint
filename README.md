@@ -4,9 +4,13 @@ Create aligned slicer modifiers by selecting surfaces on an STL. Choose a post
 or wall, set how far the modifier extends below and above its base, and export
 one 3MF with the model and modifiers already positioned.
 
-**Experimental preview · v0.1.0**
+**v0.1.0 · First experimental release**
 
 [Open AnchorPaint](https://hygea.github.io/AnchorPaint/)
+
+[v0.1.0 release notes](https://github.com/Hygea/AnchorPaint/releases/tag/v0.1.0)
+record the first tested public version. The hosted app follows main and may
+receive later updates; the release tag preserves this version's source.
 
 AnchorPaint runs in your browser. No installation, account or backend is required
 for the hosted app. STL processing and 3MF generation happen on your computer.

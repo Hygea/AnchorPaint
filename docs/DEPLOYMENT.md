@@ -15,7 +15,7 @@ main is the only remaining branch. The merge retains the preparation history.
 ## Release preparation
 
 Review [release readiness](PUBLIC_RELEASE_AUDIT.md), [license scope](../NOTICE.md)
-and the [draft release notes](releases/v0.1.0.md). Original code is MIT; preset
+and the [release notes](releases/v0.1.0.md). Original code is MIT; preset
 licenses and editable sources are included in the site. Review any remaining
 GitHub cached-history privacy issue before changing repository visibility.
 
@@ -42,9 +42,10 @@ GitHub cached-history privacy issue before changing repository visibility.
    select a shaft, change depth/overlap, add a modifier and export 3MF. Verify the
    orange preview, asset/console health and absence of model-upload requests.
    Check the credits link, preset license and editable sources at the same prefix.
-8. Record the live run/commit/browser result and update the README's pending-link
-   language only after success. Then separately approve tag v0.1.0 and publish the
-   release notes. No desktop installer is required.
+8. Record the live run/commit/browser result and update the README's deployment
+   language after success. For each release, obtain maintainer authorization,
+   tag the tested source version and publish its release notes. No desktop
+   installer is required.
 
 ## Pipeline
 
@@ -65,8 +66,8 @@ For local commands and Windows notes, see [DEVELOPMENT.md](DEVELOPMENT.md).
 | --- | --- |
 | Deployment prepared | Workflow and production checks pass; license/source packaging included |
 | Deployment successfully published | Public Pages site and live browser acceptance verified 2026-10-24 |
-| Public release approved | Live acceptance complete; a version tag/release remains a separate maintainer decision |
-| Public release published | No tag or release created by preparation |
+| Public release approved | Maintainer authorized the first experimental release, v0.1.0, on 2026-10-24 |
+| Versioned release | [v0.1.0](https://github.com/Hygea/AnchorPaint/releases/tag/v0.1.0) records the first tested public source snapshot |
 
 References: [Vite deployment](https://vite.dev/guide/static-deploy.html#github-pages),
 [GitHub custom workflows](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages),
